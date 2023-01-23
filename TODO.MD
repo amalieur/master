@@ -8,7 +8,7 @@ This file contains the tasks and things that need to be done during development.
 ## Data preparation
     
   - [x] Decide on and create a file-structure that will be used for the project
-  - [ ] 
+  - [X] Decide on and implement a naming convention for the trajectories
 
 ### **Porto**
 
@@ -20,11 +20,11 @@ This file contains the tasks and things that need to be done during development.
 
 ### **Rome**
 
-- [] Concatenate the traces from one row per point to one row witha list og points
-- [] Ensure data are within bounded rectangle
-- [] Ensure all traces hold the minimum length
+- [x] Concatenate the traces from one row per point to one row with a list of points
+- [x] Ensure data are within bounded rectangle
+- [x] Ensure all traces hold the minimum length
 - [] Remove traces with invalid data points
-- [] Abiltiy to write trajectories to files and to clear old files when refreshin data set
+- [x] Abiltiy to write trajectories to files and to clear old files when refreshin data set
 
 
 ---
