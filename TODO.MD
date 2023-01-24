@@ -7,8 +7,9 @@ This file contains the tasks and things that need to be done during development.
 
 ## Data preparation
     
-  - [x] Decide on and create a file-structure that will be used for the project
-  - [X] Decide on and implement a naming convention for the trajectories
+- [x] Decide on and create a file-structure that will be used for the project
+- [X] Decide on and implement a naming convention for the trajectories
+
 
 ### **Porto**
 
@@ -26,6 +27,9 @@ This file contains the tasks and things that need to be done during development.
 - [] Remove traces with invalid data points
 - [x] Abiltiy to write trajectories to files and to clear old files when refreshin data set
 
+### Common
+
+- [] Split datasets using meta-files (100 - 200 - ... - 1000)
 
 ---
 
