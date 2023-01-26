@@ -92,3 +92,29 @@ def delete_meta_files(path_to_files: str, prefix: str = "META") -> None:
             print("Failed to remove %s. Reason: %s" % (file_path, e))
     
     return
+
+
+def read_meta_file(path_to_file: str) -> list[str]:
+    """
+    Reads and returns the content of a trajectory metafile as a list
+
+    Parameters
+    ---
+    path_to_file : str
+        Path to the metafile to be read
+    
+    Returns
+    ---
+    A list containing the filenames in the metafile
+    """
+
+    try:
+        with open(path_to_file,'r') as file:
+            trajectory_files = [ line.rstrip() for line in file ]
+            file.close()
+    except FileNotFoundError:
+        print("Can't find file.")
+
+    return trajectory_files
+
+
