@@ -9,7 +9,7 @@ def calculate_trajectory_distance(positions: list[tuple[float]]) -> float:
 
     :param: List of coordinates (lat, lon)
     
-    :return: Float -> Combined distance between all pairs of points
+    :return: Float (km) -> Combined distance between all pairs of points in km
     """
     distance = 0
     for i in range(1, len(positions)):
