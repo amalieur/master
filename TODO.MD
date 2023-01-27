@@ -24,13 +24,15 @@ This file contains the tasks and things that need to be done during development.
 - [x] Concatenate the traces from one row per point to one row with a list of points
 - [x] Ensure data are within bounded rectangle
 - [x] Ensure all traces hold the minimum length
-- [] Remove traces with invalid data points
+- [x] Remove traces with invalid data points
 - [x] Abiltiy to write trajectories to files and to clear old files when refreshing data set
 
 ### Common
 
 - [x] Split datasets using meta-files (100 - 200 - ... - 1000)
 - [x] Added support for the creation of a smaller test-set of a given size
+- [ ] Create and develop statistics methods over the datasets
+- [ ] Gather statistics for the two datasets
 
 ---
 
