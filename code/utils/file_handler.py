@@ -29,10 +29,33 @@ def read_trajectory_file(file_path: str) -> list[list[float]]:
     return trajectory
 
 
+def load_trajectory_files(files: list[str], folder_path) -> dict:
+    """
+    Loads all trajectory.txt files and returns the content as a dictionary
+
+    Parameters
+    ----------
+    files : list[str]
+        A list of the files that should be read
+
+    Returns
+    ---
+    A dictionary containing the files and their coordinates with their filename as key
+    """
+
+    file_list = files
+    trajectories = dict()
+
+    for file_name in file_list:
+        key = os.path.splitext(file_name)[0]
+        trajectory = read_trajectory_file(folder_path + file_name)
+        
+        trajectories[key] = trajectory
+
+    return trajectories
 
 
-
-def load_trajectory_files(folder_path: str, prefix: str) -> dict:
+def load_all_trajectory_files(folder_path: str, prefix: str) -> dict:
     """
     Reads all trajectory.txt files with the given prefix in the folder and returns a dictionary containing the data
 
