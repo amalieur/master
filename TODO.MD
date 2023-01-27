@@ -15,7 +15,7 @@ This file contains the tasks and things that need to be done during development.
 
 - [x] Ensure data are within bounded rectangle
 - [x] Ensure that traces holds a minimum length
-- [] Ensure traces with invalid data points are removed
+- [x] Ensure traces with invalid data points are removed
 - [x] Abiltiy to write trajectories to files and to clear old files
 
 
@@ -25,18 +25,28 @@ This file contains the tasks and things that need to be done during development.
 - [x] Ensure data are within bounded rectangle
 - [x] Ensure all traces hold the minimum length
 - [] Remove traces with invalid data points
-- [x] Abiltiy to write trajectories to files and to clear old files when refreshin data set
+- [x] Abiltiy to write trajectories to files and to clear old files when refreshing data set
 
 ### Common
 
-- [] Split datasets using meta-files (100 - 200 - ... - 1000)
+- [x] Split datasets using meta-files (100 - 200 - ... - 1000)
+- [x] Added support for the creation of a smaller test-set of a given size
 
 ---
 
 ## Development
 
 
+### Utilities-functions
+
+- [x] Alphabetical incrementer for naming trajectory files
+- [x] File handler for reading trajectories
+- [x] Meta file handler for retrieving the datasets
+- [x] Distance function for the computation of distance beween any two coordinates
+
 ### Scheme creation
+
+- [] Add a common interface with a minimum number of functionality that both schemes should implement
 
 **Grid shemes**
 - [] Some task
@@ -48,4 +58,12 @@ This file contains the tasks and things that need to be done during development.
 ---
 ## Experiments
 
+---
+
+## Figures and visualisation of data and results 
+
+### Data
+- [x] Simple test method for plotting trajectories
+
+### Results
 
