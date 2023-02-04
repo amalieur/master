@@ -1,6 +1,7 @@
 data/raw_data/taxi_february.txt
 data/raw_data/train.csv
 
-data/chosen_data
+data/chosen_data/
+data/hashed_data/
 
 __pycache__/
