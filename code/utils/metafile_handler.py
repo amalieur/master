@@ -107,13 +107,12 @@ def read_meta_file(path_to_file: str) -> list[str]:
     ---
     A list containing the filenames in the metafile
     """
-
     try:
         with open(path_to_file,'r') as file:
             trajectory_files = [ line.rstrip() for line in file ]
             file.close()
     except FileNotFoundError:
-        print("Can't find file.")
+        raise(Exception(f"Cant find file {path_to_file}"))
 
     return trajectory_files
 
