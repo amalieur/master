@@ -9,7 +9,12 @@ from .lsh_interface import LSHInterface
 
 from utils import trajectory_distance as td
 from utils import alphabetical_number as an
+from utils import metafile_handler as mfh
+from utils import file_handler as fh
 
+from colorama import init as colorama_init, Fore, Style
+
+from itertools import groupby
 
 class GridLSH(LSHInterface):
     """ 
@@ -61,6 +66,8 @@ class GridLSH(LSHInterface):
 
         self.distortion = self._compute_grid_distortion(self.lat_len, self.lon_len, self.resolution, self.layers)
 
+        self.hashes = dict()
+
 
     def __str__(self) -> str:
         """ Prints information about the grid """
@@ -72,7 +79,13 @@ class GridLSH(LSHInterface):
             f"Resolution: {self.resolution} km \n" \
             f"Distortion: {self.distortion} km \n" \
             f"Dimensions: {lat_cells, lon_cells} cells"
-        
+
+    # Defining some getters and setters
+
+    def set_meta_file(self, meta_file: str) -> None:
+        """ Additional set method for the meta_file attribute """
+        self.meta_file = meta_file
+             
 
     def _compute_grid_distortion(self, lat_len: float, lon_len: float, resolution: float, layers: int) -> list[float]:
         """ Compute a random grid distortion off the resolution for the number of layers"""
@@ -81,13 +94,11 @@ class GridLSH(LSHInterface):
         distortion = [random.random()*resolution for x in range(layers)]
         return distortion
 
-    def _compute_grid_resolution(self, lat_len: float, lon_len: float):
-        """ Compute resolution if not provided during init"""
-        pass
 
     def _create_trajectory_hash(self, trajectory: list[list[float]]) -> list[list[str]]:
         """ Creates a hash for one trajectory for all layers, returns it as a list of length layers with a list for each hashed layer """
 
+        # Snap trajectories to grid:
         hashes = []
         for layer in range(self.layers):
             distortion = self.distortion[layer]
@@ -104,14 +115,50 @@ class GridLSH(LSHInterface):
                 lon_hash = int((lon + lon_distort - self.min_lon) // self.lon_res)
                 hash.append(an.get_alphabetical_value([lat_hash, lon_hash]))
             hashes.append(hash)
-        
-        #print(hashes)
-        
-        # TODO Further work
     
-    def _compute_grid():
-        pass
-    
+        # Then remove consecutive duplicats and return result:
+        result = []
+        for hash in hashes:
+            result.append([el[0] for el in groupby(hash)])
+        
+        return result
+  
+
+    def compute_dataset_hashes(self) -> dict[str,list]:
+        """ Method for computing the grid hashes for a given dataset and stores it in a dictionary
+
+        Params
+        ---
+        meta_file_path : str
+            The path to the dataset metafile
+
+        Returns
+        ---
+        A dictionary containing the hashes
+        """
+        files = mfh.read_meta_file(self.meta_file)
+        trajectories = fh.load_trajectory_files(files, self.data_path)
+
+        # Starting to hash the trajectories
+        for key in trajectories:
+            self.hashes[key] = self._create_trajectory_hash(trajectories[key])
+
+        return self.hashes
+
+
+
+    def print_hashes(self):
+        """Method that prints the created hashes"""
+
+        if len(self.hashes) == 0: print("No hashes created yet")
+        else:
+            colorama_init()
+            for key in self.hashes:
+                print(f"{Fore.GREEN}{key}{Style.RESET_ALL}:  {Fore.BLUE}{self.hashes[key][0]}{Style.RESET_ALL} ")
+                for hash in self.hashes[key][1:]:
+                    print(f"\t{Fore.BLUE}{hash}{Style.RESET_ALL}")
+
+
 
 if __name__=="__main__":
     Grid = GridLSH("G1",min_lat=41.14, max_lat=41.19, min_lon= -8.66, max_lon=-8.57, resolution=0.25, meta_file="meta.txt", data_path="/data")
