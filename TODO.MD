@@ -48,10 +48,18 @@ This file contains the tasks and things that need to be done during development.
 
 ### Scheme creation
 
-- [] Add a common interface with a minimum number of functionality that both schemes should implement
+- [x] Add a common interface with a minimum number of functionality that both schemes should implement
+- [x] Create and implement hash naming conventions for both schemes
+- [ ] 
 
 **Grid shemes**
-- [] Some task
+- [x] Create a class for gridLSH objects
+- [x] Implement grid distortion
+- [x] Add grid layers
+- [x] Implement hash function and methods
+- [x] Print functions
+- [x] Save data and meta-files
+- [x] Create a procedure-oriented jupyter notebook for streamlining the grid LSH creation process
 
 
 **Disk schemes**
