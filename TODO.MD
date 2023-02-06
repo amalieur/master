@@ -60,14 +60,26 @@ This file contains the tasks and things that need to be done during development.
 - [x] Print functions
 - [x] Save data and meta-files
 - [x] Create a procedure-oriented jupyter notebook for streamlining the grid LSH creation process
+- [ ] Implement functions so that the time needed to create the hashes can be measured, (Without I/O)
 
 
 **Disk schemes**
-- [] Some task
-
+- [ ] Create a class for diskLSH objects
+- [ ] Implement random disk deployment for each layer
+- [ ] Implement layers
+- [ ] Print functions
+- [ ] Save data and meta-files
+- [ ] Procedure-oriented notebook for streamlining the disk LSH creation process
+- [ ] Function that can be used for measuring the actual hashing process 
+ 
 ---
 ## Experiments
 
+### Preparations:
+- [ ] Creation of test-data (DTW / Frechet - true similarities)
+- [ ] Storing test-data
+- [ ] LCSS vs edit-distance of hashes. Are there any significant differences?
+- [ ] 
 ---
 
 ## Figures and visualisation of data and results 
