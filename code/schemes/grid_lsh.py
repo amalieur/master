@@ -18,7 +18,7 @@ from itertools import groupby
 
 import timeit as ti
 
-class GridLSH():
+class GridLSH(LSHInterface):
     """ 
     A class for a grid-based LSH function for trajectory data
     """
