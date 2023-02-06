@@ -17,33 +17,47 @@ def increment_alphabetical(s: str) -> str:
 # Functions to get alphabetical numbers from normal numbers
 
 def _get_char_value(key: int, base: int) -> str:
-    if key > 676:
-        raise("Error: Too big number to be converted to alphabetic number")
+    if key >= 676:
+        raise ValueError("Error: Too big number to be converted to alphabetic number")
     
     return chr(ord(base) + key // 26) + chr(ord(base) + key % 26)
 
-def get_alphabetical_value(hash: list[int]) -> str:
-    """ Returns a string representing a hash output 
-        Big letters represent the lat value and small letters represent the long value
+
+
+def get_alphabetical_value(hash: list[int] | int) -> str:
+    """ 
+    Returns a string representing a hash output 
+    Big letters represent the lat value and small letters represent the long value
     """
     
-    _get_char_value(12, "A")
-
     out_value = ""
 
-    for i, key in enumerate(hash):
-        match i:
-            case 0:
-                out_value += _get_char_value(key,"A")
-            case 1:
-                out_value += _get_char_value(key,"a")
-            case _:
-                raise("Exception during alphabetical value conversion")
+    if isinstance(hash, int):
+        out_value += _get_char_value(hash, "A")
+
+    else:
+
+        for i, key in enumerate(hash):
+            match i:
+                case 0:
+                    out_value += _get_char_value(key,"A")
+                case 1:
+                    out_value += _get_char_value(key,"a")
+                case _:
+                    raise("Exception during alphabetical value conversion")
     
     return out_value
+
+
 
 if __name__=="__main__":
     print(get_alphabetical_value([1, 13]))
     print(get_alphabetical_value([5, 32]))
     print(get_alphabetical_value([32, 2]))
     print(get_alphabetical_value([35,66]))
+    print(get_alphabetical_value([675, 675]))
+    
+    print(get_alphabetical_value(0))
+    print(get_alphabetical_value(1))
+    print(get_alphabetical_value(35))
+    print(get_alphabetical_value(675))
