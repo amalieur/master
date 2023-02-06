@@ -18,7 +18,7 @@ from itertools import groupby
 
 import timeit as ti
 
-class GridLSH(LSHInterface):
+class GridLSH():
     """ 
     A class for a grid-based LSH function for trajectory data
     """
@@ -149,7 +149,7 @@ class GridLSH(LSHInterface):
 
 
 
-    def measure_hash_computation(self, repeat, number) -> list:
+    def measure_hash_computation(self, repeat: int, number: int) -> list:
         """ Method for measuring the computation time of the grid hashes. Does not change the object nor its attributes. """
         files = mfh.read_meta_file(self.meta_file)
         trajectories = fh.load_trajectory_files(files, self.data_path)

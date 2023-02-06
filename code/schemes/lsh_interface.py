@@ -5,56 +5,24 @@ Superclass for LSHschemes
 class LSHInterface:
     """ Interface for LSH classes"""
 
-    def read_meta_file(self, file_path: str) -> list:
-        """ 
-        Read the meta_data_file 
-
-        Parameters
-        ---
-        file_path : str
-            The file_path of the meta-file containing the dataset
-
-        Returns
-        ---
-        A list containing the file name of each trajectory in the set
-        """
+    def _create_trajectory_hash(self, trajectory: list[list[float]]) -> list[list[str]]:
+        """ Hash a single trajectory """
         pass
 
-    def read_data_file(self, file_path: str) -> list:
-        """ 
-        Read a trajectory file and return the content as a two-dimesional list 
-        
-        Parameters
-        ---
-        file_path : str
-            The file_path of the trajectory file
-
-        Returns
-        ---
-        A list containing the coordinates of the trajectory
-        """
+    def compute_dataset_hashes(self) -> dict[str, list]:
+        """ Compute all trajectory hashes """
         pass
 
-    def load_files(self, file_path: str) -> None:
-        """ 
-        Loads the trajectories of a given dataset into memory
-        
-        Parameters
-        ---
-        file_path : str
-            The file_path of the met
-
-        """
+    def measure_hash_computation(self, number: int, repeat: int) -> None:
+        """ Method for measuring the actual compuation time needed to hash """
         pass
 
-    def write_file(self, output_path: str) -> None:
-        """ Write a file to a given path """
+    def print_hashes(self) -> str:
+        """ Method to print the schemes hashes """
         pass
 
-    def hash_trajectory(self, trajectory: list[tuple[float]]) -> list:
-        """ Hashes a trajectory through the created grid """
+    def set_meta_file(self, meta_file: str) -> None:
+        """ Method to set a schemes meta_file"""
         pass
-
-   
 
     
