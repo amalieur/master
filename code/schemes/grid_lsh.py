@@ -16,6 +16,8 @@ from colorama import init as colorama_init, Fore, Style
 
 from itertools import groupby
 
+import timeit as ti
+
 class GridLSH(LSHInterface):
     """ 
     A class for a grid-based LSH function for trajectory data
@@ -85,7 +87,7 @@ class GridLSH(LSHInterface):
     def set_meta_file(self, meta_file: str) -> None:
         """ Additional set method for the meta_file attribute """
         self.meta_file = meta_file
-             
+
 
     def _compute_grid_distortion(self, lat_len: float, lon_len: float, resolution: float, layers: int) -> list[float]:
         """ Compute a random grid distortion off the resolution for the number of layers"""
@@ -144,6 +146,20 @@ class GridLSH(LSHInterface):
             self.hashes[key] = self._create_trajectory_hash(trajectories[key])
 
         return self.hashes
+
+
+
+    def measure_hash_computation(self, repeat, number) -> list:
+        """ Method for measuring the computation time of the grid hashes. Does not change the object nor its attributes. """
+        files = mfh.read_meta_file(self.meta_file)
+        trajectories = fh.load_trajectory_files(files, self.data_path)
+        hashes = dict()
+        def compute_hashes(trajectories, hashes):
+            for key in trajectories:
+                hashes[key] = self._create_trajectory_hash(trajectories[key])
+        
+        measures = ti.repeat(lambda: compute_hashes(trajectories, hashes), number=number, repeat=repeat)
+        return (measures, len(hashes))
 
 
 
