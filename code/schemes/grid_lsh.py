@@ -17,6 +17,7 @@ from colorama import init as colorama_init, Fore, Style
 from itertools import groupby
 
 import timeit as ti
+import time
 
 class GridLSH(LSHInterface):
     """ 
@@ -77,7 +78,7 @@ class GridLSH(LSHInterface):
         lon_cells = int((self.max_lon - self.min_lon) // self.lon_res)
 
         return f"Grid: {self.name}\nCovering: " \
-            f"{td.calculate_trajectory_distance([[self.min_lat, self.min_lon],[self.max_lat, self.min_lon]]), td.calculate_trajectory_distance([[self.min_lat, self.min_lon],[self.min_lat, self.max_lon]])} km \n" \
+            f"{self.lat_len, self.lon_len} km \n" \
             f"Resolution: {self.resolution} km \n" \
             f"Distortion: {self.distortion} km \n" \
             f"Dimensions: {lat_cells, lon_cells} cells"
@@ -155,10 +156,11 @@ class GridLSH(LSHInterface):
         trajectories = fh.load_trajectory_files(files, self.data_path)
         hashes = dict()
         def compute_hashes(trajectories, hashes):
+            self.hashes.clear()
             for key in trajectories:
                 hashes[key] = self._create_trajectory_hash(trajectories[key])
         
-        measures = ti.repeat(lambda: compute_hashes(trajectories, hashes), number=number, repeat=repeat)
+        measures = ti.repeat(lambda: compute_hashes(trajectories, hashes), number=number, repeat=repeat, timer=time.process_time)
         return (measures, len(hashes))
 
 

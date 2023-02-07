@@ -17,7 +17,7 @@ class LSHInterface:
         """ Method for measuring the actual compuation time needed to hash """
         pass
 
-    def print_hashes(self) -> str:
+    def print_hashes(self) -> None:
         """ Method to print the schemes hashes """
         pass
 
