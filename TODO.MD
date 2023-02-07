@@ -50,7 +50,7 @@ This file contains the tasks and things that need to be done during development.
 
 - [x] Add a common interface with a minimum number of functionality that both schemes should implement
 - [x] Create and implement hash naming conventions for both schemes
-- [ ] 
+- [ ] Adjust measuring method to use nanosecond timing (add _ns as postfix to the timer object)
 
 **Grid shemes**
 - [x] Create a class for gridLSH objects
@@ -64,10 +64,10 @@ This file contains the tasks and things that need to be done during development.
 
 
 **Disk schemes**
-- [ ] Create a class for diskLSH objects
-- [ ] Implement random disk deployment for each layer
-- [ ] Implement layers
-- [ ] Print functions
+- [x] Create a class for diskLSH objects
+- [x] Implement random disk deployment for each layer
+- [x] Implement layers
+- [x] Print functions
 - [ ] Save data and meta-files
 - [ ] Procedure-oriented notebook for streamlining the disk LSH creation process
 - [ ] Function that can be used for measuring the actual hashing process 
@@ -89,3 +89,14 @@ This file contains the tasks and things that need to be done during development.
 
 ### Results
 
+
+
+
+
+
+
+# Aspects to potentially be included in the discussion:
+
+Dataen som er benyttet har er ikke labelet og har heller ingen forhåndsdefinert mønster, slik at vi kan forvente å få klare og tydelige clusters. Sporene er valgt vilkårlig, og siden de opererer innenfor trafikkmønster kan vi anta at dataen inneholder et visst mønster. Det er fair å gå ut i fra at dersom man hadde hatt testdata som inneholder tydeligere clustere, kunne man sannsynligvis scoret høyere på clustering - scopet for denne oppgaven er imidlertid ikke å lage tydelige clustere, men å sammenlikne hvorvidt LSH og true similarities korrelerer.
+
+Også et avsnitt om hvorvidt generering av diskLSH hashes har tilstrekkelig kjøretid. I tidlig februar tok genereringen av hashes i snitt et minutt or tusen spor.... Denne prosessen kan trolig speedes opp med multithreaing / multiprocessing. Sammenlikner man med gridLSH så tar den samme prosessen under et sekund
