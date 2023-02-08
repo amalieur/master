@@ -68,9 +68,10 @@ This file contains the tasks and things that need to be done during development.
 - [x] Implement random disk deployment for each layer
 - [x] Implement layers
 - [x] Print functions
-- [ ] Save data and meta-files
-- [ ] Procedure-oriented notebook for streamlining the disk LSH creation process
+- [x] Save data and meta-files
+- [x] Procedure-oriented notebook for streamlining the disk LSH creation process
 - [ ] Function that can be used for measuring the actual hashing process 
+- [ ] Implement KD-tree during hash generation -> Potentially huge improvement in runtime
  
 ---
 ## Experiments
