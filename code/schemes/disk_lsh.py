@@ -11,6 +11,8 @@ from utils import alphabetical_number as an
 from utils import metafile_handler as mfh
 from utils import file_handler as fh
 
+from utils.classes.disk import Disk
+
 from matplotlib import pyplot as plt
 from matplotlib import collections as mc
 
@@ -69,10 +71,12 @@ class DiskLSH(LSHInterface):
         
         # Lastly, instantiate and compute the disks that will represent the hash function
         self.disks = self._instantiate_disks(self.layers, self.num_disks)
-        
         self.hashes = dict()
 
-
+        # Attributes for quad-tree-like structure
+        self.split_lat = (self.max_lat + self.min_lat)/2
+        self.split_lon = (self.min_lon + self.max_lon)/2
+        self.disks_qt = self._instantiate_disks_qt(self.layers, self.num_disks)
 
     def __str__(self) -> str:
         """ Prints information about the disks"""
@@ -100,7 +104,75 @@ class DiskLSH(LSHInterface):
             
             disks[layer] = disks_list
         return disks
+    
+    def _instantiate_disks_qt(self, layers: int, num_disks: int) -> dict[str, list[list]]:
+        """ Instantiates the random disks that will be present at each layer with a quad-like structure """
+        disks = dict()
+        for layer in range(layers):
+            disks_list = [[],[],[],[]]
+            for i in range(num_disks):
+                lat = random.uniform(self.min_lat, self.max_lat)
+                lon = random.uniform(self.min_lon, self.max_lon)
+                Dsk = Disk(i, lat, lon)
+                
+                # Must now determine which quadrant the Disk intersects with and add them into that one
+                match self._get_quadrant(lat, lon, self.split_lat, self.split_lon):
+                    case 0: # First quadrant upper left
+                        disks_list[0].append(Dsk)
 
+                        intersect_right = td.calculate_trajectory_distance([(lat,lon),(lat, self.split_lon)]) < self.diameter
+                        intersect_bottom = td.calculate_trajectory_distance([(lat,lon),(self.split_lat, lon)]) < self.diameter
+                        intersect_bottom_right = td.calculate_trajectory_distance([(lat, lon),(self.split_lat, self.split_lon)]) < self.diameter
+                        
+                        if intersect_right: disks_list[1].append(Dsk)           # Also intersects with second quadrant
+                        if intersect_bottom: disks_list[2].append(Dsk)          # Third quadrant
+                        if intersect_bottom_right: disks_list[3].append(Dsk)    # Fourth quadrant
+
+                    case 1:
+                        # Second quadrant upper right
+                        disks_list[1].append(Dsk)
+
+                        intersect_left = td.calculate_trajectory_distance([(lat,lon),(lat, self.split_lon)]) < self.diameter
+                        intersect_bottom = td.calculate_trajectory_distance([(lat,lon),(self.split_lat, lon)]) < self.diameter
+                        intersect_bottom_left = td.calculate_trajectory_distance([(lat, lon),(self.split_lat, self.split_lon)]) < self.diameter
+                        
+                        if intersect_left: disks_list[0].append(Dsk)            # Also intersects with first quadrant
+                        if intersect_bottom: disks_list[3].append(Dsk)          # fourth quadrant
+                        if intersect_bottom_left: disks_list[2].append(Dsk)     # third quadrant
+                    
+                    case 2:
+                        # Third quadrant bottom left
+                        disks_list[2].append(Dsk)
+
+                        intersect_right = td.calculate_trajectory_distance([(lat,lon),(lat, self.split_lon)]) < self.diameter
+                        intersect_top = td.calculate_trajectory_distance([(lat,lon),(self.split_lat, lon)]) < self.diameter
+                        intersect_top_right = td.calculate_trajectory_distance([(lat, lon),(self.split_lat, self.split_lon)]) < self.diameter
+                        
+                        if intersect_right: disks_list[3].append(Dsk)           # Also intersects with fourth quadrant
+                        if intersect_top: disks_list[0].append(Dsk)             # first quadrant
+                        if intersect_top_right: disks_list[1].append(Dsk)       # second quadrant
+
+                    case 3:
+                        # Fourth quadrant bottom right
+                        disks_list[3].append(Dsk)
+
+                        intersect_left = td.calculate_trajectory_distance([(lat,lon),(lat, self.split_lon)]) < self.diameter
+                        intersect_top = td.calculate_trajectory_distance([(lat,lon),(self.split_lat, lon)]) < self.diameter
+                        intersect_top_left = td.calculate_trajectory_distance([(lat, lon),(self.split_lat, self.split_lon)]) < self.diameter
+                        
+                        if intersect_left: disks_list[2].append(Dsk)           # Also intersects with third quadrant
+                        if intersect_top: disks_list[1].append(Dsk)             # second quadrant
+                        if intersect_top_left: disks_list[0].append(Dsk)       # first quadrant
+                    case _:
+                        raise Exception("Somethin went wrong during init of quad-disks")
+            disks[layer] = disks_list
+        
+        
+        # Controlling the structure
+        for key in disks:
+            print([len(quadrant) for quadrant in disks[key]], len(sum(disks[key], [])), len(set(sum(disks[key], []))))
+
+        return disks
 
     def _create_trajectory_hash(self, trajectory: list[list[float]]) -> list[list[str]]:
         """ Creates a hash for one trajectory for all layers. Returns it as a alist of length layers with a list of hashed point for each layer """
@@ -119,11 +191,37 @@ class DiskLSH(LSHInterface):
                         within.remove(disk)
 
                 # If next point inside disk: Append to hash if not still within disk
+                # Can speed up substantially by applying a tree-structure here, naive implementation for now:
                 for i, disk in enumerate(disks):
                     if td.calculate_trajectory_distance([[lat, lon], disk]) <= self.diameter:
                         if disk not in within:
                             within.append(disk)
                             diskHash = an.get_alphabetical_value(i)
+                            hash.append(diskHash)
+            hashes.append(hash)
+        return hashes
+
+    
+    def _create_trajectory_hash_with_quad_tree(self, trajectory: list[list[float]]) -> list[list[str]]:
+        """Same as above, but utilises a quad-tree-like structure for faster computation """
+        hashes = []
+        for layer in self.disks_qt.keys():
+            hash = []
+            within = []
+            disks = self.disks_qt[layer]
+            for coordinate in trajectory:
+                lat, lon = coordinate
+                quadrant = self._get_quadrant(lat,lon, self.split_lat, self.split_lon)
+
+                for disk in within:
+                    if td.calculate_trajectory_distance([[lat, lon], [disk.lat, disk.lon]]) > self.diameter:
+                        within.remove(disk)
+                
+                for disk in disks[quadrant]:
+                    if td.calculate_trajectory_distance([[lat, lon], [disk.lat, disk.lon]]) <= self.diameter:
+                        if disk not in within:
+                            within.append(disk)
+                            diskHash = an.get_alphabetical_value(disk.name)
                             hash.append(diskHash)
             hashes.append(hash)
         return hashes
@@ -151,7 +249,21 @@ class DiskLSH(LSHInterface):
         return self.hashes
 
 
-    def measure_hash_computation(self, number: int, repeat: int) -> None:
+    def compute_dataset_hashes_with_quad_tree(self) -> dict[str, list]:
+        """ Same as above, but utilises a quad-tree-like-structure for faster computation"""
+        # TODO
+        files = mfh.read_meta_file(self.meta_file)
+        trajectories = fh.load_trajectory_files(files, self.data_path)
+
+        # Beginning to hash trajectories
+        hashes = dict()
+        for key in trajectories:
+            hashes[key] = self._create_trajectory_hash(trajectories[key])
+        
+        return hashes
+
+
+    def measure_hash_computation(self, number: int, repeat: int) -> list[list, int]:
         """ Method for measuring the computation time of the grid hashes. Does not change the object nor its attributes. """
         files = mfh.read_meta_file(self.meta_file)
         trajectories = fh.load_trajectory_files(files, self.data_path)
@@ -159,6 +271,19 @@ class DiskLSH(LSHInterface):
         def compute_hashes(trajectories, hashes):
             for key in trajectories:
                 hashes[key] = self._create_trajectory_hash(trajectories[key])
+        
+        measures = ti.repeat(lambda: compute_hashes(trajectories, hashes), number=number, repeat=repeat, timer=time.process_time)
+        return (measures, len(hashes))
+
+
+    def measure_hash_computation_with_quad_tree(self, number: int, repeat: int) -> None:
+        """ Same as above, but using quad-structure for speed improvement """
+        files = mfh.read_meta_file(self.meta_file)
+        trajectories = fh.load_trajectory_files(files, self.data_path)
+        hashes = dict()
+        def compute_hashes(trajectories, hashes):
+            for key in trajectories:
+                hashes[key] = self._create_trajectory_hash_with_quad_tree(trajectories[key])
         
         measures = ti.repeat(lambda: compute_hashes(trajectories, hashes), number=number, repeat=repeat, timer=time.process_time)
         return (measures, len(hashes))
@@ -197,6 +322,16 @@ class DiskLSH(LSHInterface):
             ax.add_patch(plt.Circle((y,x), radius, fill=False))
 
         plt.show()
+
+    
+    def _get_quadrant(self, lat: float, lon: float, split_lat, split_lon):
+        """ Helper function that returns the corresponding quadrant that a point is in """
+        if lat <= split_lat and lon >= split_lon: return 0 # First quadrant upper left
+        elif lat > split_lat and lon >= split_lon: return 1 # Second quadrant upper right
+        elif lat <= split_lat and lon < split_lon: return 2 # Third quadrant bottom left
+        elif lat > split_lat and lon < split_lon: return 3 # Fourth quadrant bottom right
+        else:
+            raise Exception("Somethin went wrong during quadrant fetching (Should be impossible)")
 
 
 if __name__=="__main__":
