@@ -156,11 +156,12 @@ class GridLSH(LSHInterface):
         trajectories = fh.load_trajectory_files(files, self.data_path)
         hashes = dict()
         def compute_hashes(trajectories, hashes):
-            self.hashes.clear()
+            #self.hashes.clear()
             for key in trajectories:
                 hashes[key] = self._create_trajectory_hash(trajectories[key])
-        
-        measures = ti.repeat(lambda: compute_hashes(trajectories, hashes), number=number, repeat=repeat)#, timer=time.process_time)
+            return
+
+        measures = ti.repeat(lambda: compute_hashes(trajectories, hashes), number=number, repeat=repeat, timer=time.process_time)
         return (measures, len(hashes))
 
 
