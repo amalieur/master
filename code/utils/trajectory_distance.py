@@ -51,3 +51,21 @@ def get_longitude_difference(distance: float, latitude: float) -> float:
     longitide decimal degree difference as float
     """
     return distance/(111.320*math.cos(math.radians(latitude)))
+
+
+
+
+def get_euclidean_distance(pos1: list[float], pos2: list[float]) -> float:
+    """
+    Calculcate the euclidean distance between any two points
+    **Using this method for geo-coordinates is a simplification, and will result in some errors compared to the true distance
+
+    Param
+    ---
+    pos1 : list(float) [lat, lon]
+        The start coordinate
+    pos2 : list(float) [lat, lon]
+        The end coordinate
+    """
+    distance = math.sqrt((pos1[0]-pos2[0])**2 + (pos1[1]-pos2[1])**2)
+    return distance
