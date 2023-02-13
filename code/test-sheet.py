@@ -14,7 +14,7 @@ from multiprocessing import Pool
 #p.nice(psutil.REALTIME_PRIORITY_CLASS)
 
 abs_path = os.path.dirname(__file__)
-rel_path = "../data/chosen_data/porto/META-50.TXT"
+rel_path = "../data/chosen_data/porto/META-200.TXT"
 ful_path = os.path.join(abs_path, rel_path)
 
 data_path = os.path.join(abs_path, "../data/chosen_data/porto/")
@@ -52,6 +52,9 @@ def dunq(x):
     disk = DiskLSH("D1",41.14, 41.19, -8.66, -8.57, 50, 4, 1.5, ful_path, data_path=data_path)
     return disk.measure_hash_computation_with_quad_tree(1,1)[0]
 
+def dunk(x):
+    disk = DiskLSH("D1",41.14, 41.19, -8.66, -8.57, 50, 4, 1.5, ful_path, data_path=data_path)
+    return disk.measure_hash_computation_with_KD_tree(1,1)[0]
 def gun(x):
     grid = GridLSH("G1",min_lat=41.14, max_lat=41.19, min_lon= -8.66, max_lon=-8.57, resolution=0.25, layers=4, meta_file=ful_path, data_path=data_path)
     return grid.measure_hash_computation(1,1)[0]
@@ -60,7 +63,7 @@ def gun(x):
 if __name__=="__main__":
     # name=main important for paralell processing
     with Pool() as pool:
-        result = pool.map(dun, range(10))
+        result = pool.map(gun, range(10))
     print(result)
 
 #disk.visualise_hashes()
