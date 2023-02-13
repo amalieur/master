@@ -320,13 +320,28 @@ class DiskLSH(LSHInterface):
         
         return hashes
 
+    
+    def compute_dataset_hashes_with_KD_tree(self) -> dict[str, list]:
+        """ Same as above, but utilises a KD-tree for faster computation"""
+        files = mfh.read_meta_file(self.meta_file)
+        trajectories = fh.load_trajectory_files(files, self.data_path)
+
+        # Beginning to hash trajectories
+        hashes = dict()
+        for key in trajectories:
+            hashes[key] = self._create_trajectory_hash_with_KD_tree(trajectories[key])
+        
+        return hashes
+
+
 
     def measure_hash_computation(self, number: int, repeat: int) -> list[list, int]:
         """ Method for measuring the computation time of the grid hashes. Does not change the object nor its attributes. """
         files = mfh.read_meta_file(self.meta_file)
         trajectories = fh.load_trajectory_files(files, self.data_path)
         hashes = dict()
-        def compute_hashes(trajectories, hashes):
+        
+        def compute_hashes(trajectories: dict, hashes: dict):
             for key in trajectories:
                 hashes[key] = self._create_trajectory_hash(trajectories[key])
             return
@@ -340,12 +355,30 @@ class DiskLSH(LSHInterface):
         files = mfh.read_meta_file(self.meta_file)
         trajectories = fh.load_trajectory_files(files, self.data_path)
         hashes = dict()
-        def compute_hashes(trajectories, hashes):
+        
+        def compute_hashes(trajectories: dict, hashes: dict):
             for key in trajectories:
                 hashes[key] = self._create_trajectory_hash_with_quad_tree(trajectories[key])
             return
 
         measures = ti.repeat(lambda: compute_hashes(trajectories, hashes), number=number, repeat=repeat, timer=time.process_time)
+        return (measures, len(hashes))
+
+    
+    def measure_hash_computation_with_KD_tree(self, number: int, repeat: int) -> None:
+        """ Same as above, but using KD-tree for speed improvement """
+
+        files = mfh.read_meta_file(self.meta_file)
+        trajectories = fh.load_trajectory_files(files, self.data_path)
+        hashes = dict()
+        
+        def compute_hashes(trajectories: dict, hashes: dict):
+            for key in trajectories:
+                hashes[key] = self._create_trajectory_hash_with_KD_tree(trajectories[key])
+            return
+        
+        measures = ti.repeat(lambda: compute_hashes(trajectories, hashes), number=number, repeat=repeat, timer=time.process_time)
+
         return (measures, len(hashes))
 
 
