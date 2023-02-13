@@ -14,11 +14,16 @@ from utils import file_handler as fh
 from utils.classes.disk import Disk
 
 from matplotlib import pyplot as plt
+from matplotlib import lines
 from matplotlib import collections as mc
 
 from colorama import init as colorama_init, Fore, Style
+from scipy import spatial as sp
+
 import timeit as ti
 import time
+
+
 
 
 class DiskLSH(LSHInterface):
@@ -78,6 +83,9 @@ class DiskLSH(LSHInterface):
         self.split_lon = (self.min_lon + self.max_lon)/2
         self.disks_qt = self._instantiate_disks_qt(self.layers, self.num_disks)
 
+        # Attributes for utilising a KD-tree during disk against point matching
+        self.KDTrees = self._instantiate_KD_tree(self.layers)
+
     def __str__(self) -> str:
         """ Prints information about the disks"""
 
@@ -105,14 +113,17 @@ class DiskLSH(LSHInterface):
             disks[layer] = disks_list
         return disks
     
+
     def _instantiate_disks_qt(self, layers: int, num_disks: int) -> dict[str, list[list]]:
         """ Instantiates the random disks that will be present at each layer with a quad-like structure """
         disks = dict()
+        radius = td.get_latitude_difference(self.diameter/2)
         for layer in range(layers):
             disks_list = [[],[],[],[]]
-            for i in range(num_disks):
-                lat = random.uniform(self.min_lat, self.max_lat)
-                lon = random.uniform(self.min_lon, self.max_lon)
+            for i, disk in enumerate(self.disks[layer]):
+                #lat = random.uniform(self.min_lat, self.max_lat)
+                #lon = random.uniform(self.min_lon, self.max_lon)
+                lat, lon = disk
                 Dsk = Disk(i, lat, lon)
                 
                 # Must now determine which quadrant the Disk intersects with and add them into that one
@@ -120,9 +131,9 @@ class DiskLSH(LSHInterface):
                     case 0: # First quadrant upper left
                         disks_list[0].append(Dsk)
 
-                        intersect_right = td.calculate_trajectory_distance([(lat,lon),(lat, self.split_lon)]) < self.diameter
-                        intersect_bottom = td.calculate_trajectory_distance([(lat,lon),(self.split_lat, lon)]) < self.diameter
-                        intersect_bottom_right = td.calculate_trajectory_distance([(lat, lon),(self.split_lat, self.split_lon)]) < self.diameter
+                        intersect_right = td.get_euclidean_distance((lat,lon),(lat, self.split_lon)) <= radius
+                        intersect_bottom = td.get_euclidean_distance((lat,lon),(self.split_lat, lon)) <= radius
+                        intersect_bottom_right = td.get_euclidean_distance((lat, lon),(self.split_lat, self.split_lon)) <= radius
                         
                         if intersect_right: disks_list[1].append(Dsk)           # Also intersects with second quadrant
                         if intersect_bottom: disks_list[2].append(Dsk)          # Third quadrant
@@ -132,9 +143,9 @@ class DiskLSH(LSHInterface):
                         # Second quadrant upper right
                         disks_list[1].append(Dsk)
 
-                        intersect_left = td.calculate_trajectory_distance([(lat,lon),(lat, self.split_lon)]) < self.diameter
-                        intersect_bottom = td.calculate_trajectory_distance([(lat,lon),(self.split_lat, lon)]) < self.diameter
-                        intersect_bottom_left = td.calculate_trajectory_distance([(lat, lon),(self.split_lat, self.split_lon)]) < self.diameter
+                        intersect_left = td.get_euclidean_distance((lat,lon),(lat, self.split_lon)) <= radius
+                        intersect_bottom = td.get_euclidean_distance((lat,lon),(self.split_lat, lon)) <= radius
+                        intersect_bottom_left = td.get_euclidean_distance((lat, lon),(self.split_lat, self.split_lon)) <= radius
                         
                         if intersect_left: disks_list[0].append(Dsk)            # Also intersects with first quadrant
                         if intersect_bottom: disks_list[3].append(Dsk)          # fourth quadrant
@@ -144,9 +155,9 @@ class DiskLSH(LSHInterface):
                         # Third quadrant bottom left
                         disks_list[2].append(Dsk)
 
-                        intersect_right = td.calculate_trajectory_distance([(lat,lon),(lat, self.split_lon)]) < self.diameter
-                        intersect_top = td.calculate_trajectory_distance([(lat,lon),(self.split_lat, lon)]) < self.diameter
-                        intersect_top_right = td.calculate_trajectory_distance([(lat, lon),(self.split_lat, self.split_lon)]) < self.diameter
+                        intersect_right = td.get_euclidean_distance((lat,lon),(lat, self.split_lon)) <= radius
+                        intersect_top = td.get_euclidean_distance((lat,lon),(self.split_lat, lon)) <= radius
+                        intersect_top_right = td.get_euclidean_distance((lat, lon),(self.split_lat, self.split_lon)) <= radius
                         
                         if intersect_right: disks_list[3].append(Dsk)           # Also intersects with fourth quadrant
                         if intersect_top: disks_list[0].append(Dsk)             # first quadrant
@@ -156,9 +167,9 @@ class DiskLSH(LSHInterface):
                         # Fourth quadrant bottom right
                         disks_list[3].append(Dsk)
 
-                        intersect_left = td.calculate_trajectory_distance([(lat,lon),(lat, self.split_lon)]) < self.diameter
-                        intersect_top = td.calculate_trajectory_distance([(lat,lon),(self.split_lat, lon)]) < self.diameter
-                        intersect_top_left = td.calculate_trajectory_distance([(lat, lon),(self.split_lat, self.split_lon)]) < self.diameter
+                        intersect_left = td.get_euclidean_distance((lat,lon),(lat, self.split_lon)) <= radius
+                        intersect_top = td.get_euclidean_distance((lat,lon),(self.split_lat, lon)) <= radius
+                        intersect_top_left = td.get_euclidean_distance((lat, lon),(self.split_lat, self.split_lon)) <= radius
                         
                         if intersect_left: disks_list[2].append(Dsk)           # Also intersects with third quadrant
                         if intersect_top: disks_list[1].append(Dsk)             # second quadrant
@@ -169,15 +180,33 @@ class DiskLSH(LSHInterface):
         
         
         # Controlling the structure
-        for key in disks:
-            print([len(quadrant) for quadrant in disks[key]], len(sum(disks[key], [])), len(set(sum(disks[key], []))))
+        #for key in disks:
+        #    print([len(quadrant) for quadrant in disks[key]], len(sum(disks[key], [])), len(set(sum(disks[key], []))))
 
         return disks
+
+
+    def _instantiate_KD_tree(self, layers: int) -> dict[str, sp.cKDTree]:
+        """ Instantiates the random disks that will be present at each layer with a quad-like structure 
+        
+            Utilizes the originial disks and create a tree structure for each layer
+        """
+        if not layers:
+            raise Exception("Cannot instantiate KD-tree on empty disk map")
+
+        trees = dict()
+        for layer in range(layers):
+            tree = sp.KDTree(self.disks[layer])
+            trees[layer] = tree
+        
+        return trees
+
 
     def _create_trajectory_hash(self, trajectory: list[list[float]]) -> list[list[str]]:
         """ Creates a hash for one trajectory for all layers. Returns it as a alist of length layers with a list of hashed point for each layer """
         
         hashes = []
+        radius = td.get_latitude_difference(self.diameter/2)
         for layer in self.disks.keys():
             hash = []   # The created hash
             within = [] # The disks that the trajectory are currently within
@@ -187,13 +216,13 @@ class DiskLSH(LSHInterface):
                 
                 # If next point no longer in disk: Remove from within list
                 for disk in within:
-                    if td.calculate_trajectory_distance([[lat, lon], disk]) > self.diameter:
+                    if td.get_euclidean_distance([lat, lon], disk) > radius:
                         within.remove(disk)
 
                 # If next point inside disk: Append to hash if not still within disk
                 # Can speed up substantially by applying a tree-structure here, naive implementation for now:
                 for i, disk in enumerate(disks):
-                    if td.calculate_trajectory_distance([[lat, lon], disk]) <= self.diameter:
+                    if td.get_euclidean_distance([lat, lon], disk) <= radius:
                         if disk not in within:
                             within.append(disk)
                             diskHash = an.get_alphabetical_value(i)
@@ -205,6 +234,7 @@ class DiskLSH(LSHInterface):
     def _create_trajectory_hash_with_quad_tree(self, trajectory: list[list[float]]) -> list[list[str]]:
         """Same as above, but utilises a quad-tree-like structure for faster computation """
         hashes = []
+        radius = td.get_latitude_difference(self.diameter/2)
         for layer in self.disks_qt.keys():
             hash = []
             within = []
@@ -214,11 +244,11 @@ class DiskLSH(LSHInterface):
                 quadrant = self._get_quadrant(lat,lon, self.split_lat, self.split_lon)
 
                 for disk in within:
-                    if td.calculate_trajectory_distance([[lat, lon], [disk.lat, disk.lon]]) > self.diameter:
+                    if td.get_euclidean_distance([lat, lon], [disk.lat, disk.lon]) > radius:
                         within.remove(disk)
                 
                 for disk in disks[quadrant]:
-                    if td.calculate_trajectory_distance([[lat, lon], [disk.lat, disk.lon]]) <= self.diameter:
+                    if td.get_euclidean_distance([lat, lon], [disk.lat, disk.lon]) <= radius:
                         if disk not in within:
                             within.append(disk)
                             diskHash = an.get_alphabetical_value(disk.name)
@@ -226,6 +256,34 @@ class DiskLSH(LSHInterface):
             hashes.append(hash)
         return hashes
 
+    
+    def _create_trajectory_hash_with_KD_tree(self, trajectory: list[list[float]]) -> list[list[str]]:
+        """Same as above, but utilises a KD-tree-like for faster computation """
+        hashes = []
+        radius = td.get_latitude_difference(self.diameter/2)
+        for layer in self.disks.keys():
+            hash = []
+            within = []
+            tree = self.KDTrees[layer]
+            for coordinate in trajectory:
+                lat, lon = coordinate
+                for disk in within:
+                    dsklat, dsklon = self.disks[layer][disk]
+                    #print(dsklat, dsklon)
+                    if td.get_euclidean_distance([lat, lon], [dsklat, dsklon]) > radius:
+                        #print("Removing disk")
+                        #print(dsklat, dsklon)
+                        within.remove(disk)
+
+                # Gives disk index
+                intersect_disks = tree.query_ball_point([lat,lon], radius)
+                for disk in intersect_disks:
+                    if disk not in within:
+                        within.append(disk)
+                        diskHash = an.get_alphabetical_value(disk)
+                        hash.append(diskHash)
+            hashes.append(hash)
+        return hashes
 
     def compute_dataset_hashes(self) -> dict[str, list]:
         """ Method for computing the disk hashes for a given dataset. Stores the hashes in a dictionary
@@ -271,7 +329,8 @@ class DiskLSH(LSHInterface):
         def compute_hashes(trajectories, hashes):
             for key in trajectories:
                 hashes[key] = self._create_trajectory_hash(trajectories[key])
-        
+            return
+            
         measures = ti.repeat(lambda: compute_hashes(trajectories, hashes), number=number, repeat=repeat, timer=time.process_time)
         return (measures, len(hashes))
 
@@ -284,7 +343,8 @@ class DiskLSH(LSHInterface):
         def compute_hashes(trajectories, hashes):
             for key in trajectories:
                 hashes[key] = self._create_trajectory_hash_with_quad_tree(trajectories[key])
-        
+            return
+
         measures = ti.repeat(lambda: compute_hashes(trajectories, hashes), number=number, repeat=repeat, timer=time.process_time)
         return (measures, len(hashes))
 
@@ -308,28 +368,37 @@ class DiskLSH(LSHInterface):
                 print(f"\t{disk}")
 
 
-    def visualise_hashes(self) -> None:
+    def visualise_hashes(self, trajectory=None) -> None:
         """ Method to visualise hashes """
-        plt.rcParams["figure.autolayout"] = True
-
-        fig, ax = plt.subplots()
-
-        radius = td.get_latitude_difference(self.diameter)/2
         
-        for disk in self.disks[0]:
-            x, y= disk
-            print(disk, radius)
-            ax.add_patch(plt.Circle((y,x), radius, fill=False))
 
-        plt.show()
+        radius = td.get_latitude_difference(self.diameter/2)
+        for layer in self.disks.keys():
+            plt.rcParams["figure.autolayout"] = True
+
+            fig, ax = plt.subplots()
+            for disk in self.disks[layer]:
+                x, y = disk
+                #print(disk, radius)
+                ax.add_patch(plt.Circle((y,x), radius, fill=False))
+
+            if trajectory:
+                print("Trajectory")
+                lats, lons = list(zip(*trajectory))
+                ax.add_line(lines.Line2D(lons, lats)) 
+
+            plt.ylim(self.min_lat-0.02, self.max_lat+0.02)
+            plt.xlim(self.min_lon-0.02, self.max_lon+0.02)
+            plt.xlim()
+            plt.show()
 
     
     def _get_quadrant(self, lat: float, lon: float, split_lat, split_lon):
         """ Helper function that returns the corresponding quadrant that a point is in """
-        if lat <= split_lat and lon >= split_lon: return 0 # First quadrant upper left
-        elif lat > split_lat and lon >= split_lon: return 1 # Second quadrant upper right
-        elif lat <= split_lat and lon < split_lon: return 2 # Third quadrant bottom left
-        elif lat > split_lat and lon < split_lon: return 3 # Fourth quadrant bottom right
+        if lat >= split_lat and lon <= split_lon: return 0 # First quadrant upper left
+        elif lat >= split_lat and lon > split_lon: return 1 # Second quadrant upper right
+        elif lat < split_lat and lon <= split_lon: return 2 # Third quadrant bottom left
+        elif lat < split_lat and lon > split_lon: return 3 # Fourth quadrant bottom right
         else:
             raise Exception("Somethin went wrong during quadrant fetching (Should be impossible)")
 
