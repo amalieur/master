@@ -89,7 +89,7 @@ def edit_distance(hash_x: list[list[str]], hash_y: list[list[str]]) -> float:
     
     Returns
     ---
-    Their combined edit distance (sum of number of edits divided by longest sequence): float
+    Their combined edit distance (sum of number of edits divided by longest sequence) and total number of edits (float, float)
 
     Notes
     ---
