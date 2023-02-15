@@ -61,7 +61,8 @@ This file contains the tasks and things that need to be done during development.
 - [x] Print functions
 - [x] Save data and meta-files
 - [x] Create a procedure-oriented jupyter notebook for streamlining the grid LSH creation process
-- [ ] Implement functions so that the time needed to create the hashes can be measured, (Without I/O)
+- [x] Finalize notebook with updated ways of measuring generation speed
+- [x] Implement functions so that the time needed to create the hashes can be measured, (Without I/O)
 
 
 **Disk schemes**
@@ -71,6 +72,7 @@ This file contains the tasks and things that need to be done during development.
 - [x] Print functions
 - [x] Save data and meta-files
 - [x] Procedure-oriented notebook for streamlining the disk LSH creation process
+- [x] Finalize notebook with updated ways of measuring generation speed
 - [x] Function that can be used for measuring the actual hashing process 
 - [x] Implement a quad-like-tree (no tree really, just four quadrants) for improvement in runtime
 - [x] Implement KD-tree during hash generation -> Potentially huge improvement in runtime
@@ -86,7 +88,7 @@ This file contains the tasks and things that need to be done during development.
 - [x] Creation of test-data (DTW - true similarities)
 - [ ] Creation of test-data (Frechet - true similarities (SLOW as hell... -> Should be a one-time job but still slooooow))
 - [x] Storing test-data (becnhmarks-folder)
-- [ ] Implement edit-distance method for the schemes hashes
+- [x] Implement edit-distance method for the schemes hashes
 - [ ] 
 ---
 
