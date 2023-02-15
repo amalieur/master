@@ -64,8 +64,8 @@ def cy_frechet(trajectories: dict[str, list[list[float]]]) -> pd.DataFrame:
         for j, traj_j in enumerate(sorted_trajectories.keys()):
             X = np.array(sorted_trajectories[traj_i])
             Y = np.array(sorted_trajectories[traj_j])
-            dtw = c_frechet(X,Y)
-            M[i,j] = dtw
+            frech = c_frechet(X,Y)
+            M[i,j] = frech
             if i == j: 
                 break
     
