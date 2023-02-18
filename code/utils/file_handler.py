@@ -83,3 +83,52 @@ def load_all_trajectory_files(folder_path: str, prefix: str) -> dict:
 
     return trajectories
 
+
+def read_hash_file(file_path: str) -> list[list[float]]:
+    """
+    Reads a hash.txt file and returns the content as a list of hashes
+
+    Parameters
+    ----------
+    file_path : str
+        The file path for the file that should be read
+
+    Returns
+    ---
+    A list containing the files' hashes as lists
+    """
+
+    try:
+        with open(file_path,'r') as file:
+            hashes = [line.replace(" ","").replace("'","")[1:-2].split(",") for line in file ]
+            file.close()
+    except FileNotFoundError:
+        print("Can't find file.")
+
+    return hashes
+
+
+def load_trajectory_hashes(files: list[str], folder_path: str) -> dict:
+    """
+    Loads all hashes.txt files and returns the content as a dictionary
+
+    Parameters
+    ----------
+    files : list[str]
+        A list of the files that should be read
+
+    Returns
+    ---
+    A dictionary containing the files and their hashes with their filename as key
+    """
+
+    file_list = files
+    hashes = dict()
+
+    for file_name in file_list:
+        key = os.path.splitext(file_name)[0]
+        hash = read_hash_file(folder_path + file_name)
+        
+        hashes[key] = hash
+
+    return hashes
