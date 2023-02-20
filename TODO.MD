@@ -85,9 +85,11 @@ This file contains the tasks and things that need to be done during development.
 - [x] Implement code that can be used for similarity computation
 - [x] Implement multiple processing code so that true similarities can be comoputed faster for me
 - [x] Create a procedure-oriented notebook for the benchmarks
-- [x] Creation of test-data (DTW - true similarities)
-- [ ] Creation of test-data (Frechet - true similarities (SLOW as hell... -> Should be a one-time job but still slooooow))
-- [x] Storing test-data (becnhmarks-folder)
+- [x] Creation of similarity data (DTW - true similarities)
+- [ ] Creation of similarity data (Frechet - true similarities (SLOW as hell... -> Should be a one-time job but still slooooow :/))
+  - [x] Porto
+  - [ ] Rome
+- [x] Storing test-data (benchmarks-folder)
 - [x] Implement edit-distance method for the schemes hashes
 - [x] Implement methods to measure the time similarity computation time
   - [ ] Method that saves the measurement times (perhaps as df)
