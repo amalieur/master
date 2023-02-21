@@ -113,7 +113,7 @@ def cy_frechet_pool(trajectories: dict[str, list[list[float]]]) -> pd.DataFrame:
     pool = Pool(12)
 
     for i, traj_i in enumerate(sorted_trajectories.keys()):
-
+        print(f"Cy Pool Frehet: {i}/1000")
         frech_elements = pool.map(_fun_wrapper, [(np.array(sorted_trajectories[traj_i]), np.array(sorted_trajectories[traj_j]), j) for j, traj_j in enumerate(sorted_trajectories.keys()) if i >= j])
 
         for element in frech_elements:
