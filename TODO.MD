@@ -103,7 +103,8 @@ This file contains the tasks and things that need to be done during development.
   - [ ] Method that ...
 
 **important**
-- [ ] Rewrite edit distance so that the distance corresponds to actual distance and not just a binary relation
+- [x] Rewrite edit distance so that the distance corresponds to actual distance and not just a binary relation. Should consider DTW
+- [ ] Evaluate which distance to be used at the hashes(EDR variant working decent > correlation)
 
 ### Experiments:
 
