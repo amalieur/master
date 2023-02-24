@@ -51,13 +51,29 @@ def get_alphabetical_value(hash: list[int] | int) -> str:
 
 
 if __name__=="__main__":
-    print(get_alphabetical_value([1, 13]))
-    print(get_alphabetical_value([5, 32]))
-    print(get_alphabetical_value([32, 2]))
-    print(get_alphabetical_value([35,66]))
-    print(get_alphabetical_value([675, 675]))
-    
-    print(get_alphabetical_value(0))
-    print(get_alphabetical_value(1))
-    print(get_alphabetical_value(35))
-    print(get_alphabetical_value(675))
+    assert get_alphabetical_value([1, 13]) == "ABan"
+    assert get_alphabetical_value([5, 32]) == "AFbg"
+    assert get_alphabetical_value([32, 2])== "BGac"
+    assert get_alphabetical_value([35,66]) == "BJco"
+    assert get_alphabetical_value([675, 675]) == "ZZzz"
+    assert get_alphabetical_value(0) == "AA"
+    assert get_alphabetical_value(1) == "AB"
+    assert get_alphabetical_value(35) == "BJ"
+    assert get_alphabetical_value(675) == "ZZ"
+
+
+    assert _get_num_value("ZZ", "A") == 675
+    assert _get_num_value("BJ", "A") == 35
+    assert _get_num_value("AB", "A") == 1
+    assert _get_num_value("AA", "A") == 0
+    assert _get_num_value("zz", "a") == 675
+    assert _get_num_value("bj", "a") == 35
+    assert _get_num_value("ab", "a") == 1
+    assert _get_num_value("aa", "a") == 0
+
+    assert get_alphabetical_grid_distance("ABan", "ABam") == 1
+    assert get_alphabetical_grid_distance("ACan", "ABam") == 2
+    assert get_alphabetical_grid_distance("ABan", "BCai") == 32
+
+
+    print("All tests returned true")
