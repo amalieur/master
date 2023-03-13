@@ -4,6 +4,6 @@ data/raw_data/train.csv
 data/chosen_data/
 data/hashed_data/
 
-dependencies
+dependencies/
 
 __pycache__/
