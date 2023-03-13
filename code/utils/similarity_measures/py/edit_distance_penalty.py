@@ -1,5 +1,7 @@
 import numpy as np
 
+# This is dynamic-time-warping!!!
+
 
 def _get_num_value(string: str, base: str):
     c1, c2 = [*string]
@@ -10,7 +12,7 @@ def _get_alphabetical_grid_distance(hash_x, hash_y):
     Calculates and returns the Hamming distance between the hashes from the grids
     """
 
-    if len(hash_x) != 4 or len(hash_y) != 4:
+    if len(hash_x) != len(hash_y):
         raise ValueError("Hashes have wrong length")
     
     hx_1 = hash_x[:2]
@@ -82,10 +84,10 @@ def edit_distance_penalty(hash_x: np.ndarray, hash_y: np.ndarray) -> float:
                 elif j == 1:
                     M[i-1][j-1] = s
 
-                if X[i-1] == Y[j-1]: subcost = 0
-                else: subcost = s
+                #if X[i-1] == Y[j-1]: subcost = 0
+                #else: subcost = s
 
-                M[i,j] = min(M[i][j-1] + s, M[i-1][j] + s, M[i-1][j-1] + subcost)
+                M[i,j] = s + min(M[i][j-1], M[i-1][j], M[i-1][j-1])
         #print(M)
         cost += float(M[X_len][Y_len]) / max([X_len, Y_len])
         c += float(M[X_len][Y_len])
@@ -104,6 +106,7 @@ if __name__=="__main__":
     assert _get_num_value("ab", "a") == 1
     assert _get_num_value("aa", "a") == 0
 
+    assert _get_alphabetical_grid_distance("ACad", "ACad") == 0
     assert _get_alphabetical_grid_distance("ABan", "ABam") == 1
     assert _get_alphabetical_grid_distance("ACan", "ABam") == 2
     assert _get_alphabetical_grid_distance("ABan", "BCai") == 32
