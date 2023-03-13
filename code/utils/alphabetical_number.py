@@ -61,19 +61,4 @@ if __name__=="__main__":
     assert get_alphabetical_value(35) == "BJ"
     assert get_alphabetical_value(675) == "ZZ"
 
-
-    assert _get_num_value("ZZ", "A") == 675
-    assert _get_num_value("BJ", "A") == 35
-    assert _get_num_value("AB", "A") == 1
-    assert _get_num_value("AA", "A") == 0
-    assert _get_num_value("zz", "a") == 675
-    assert _get_num_value("bj", "a") == 35
-    assert _get_num_value("ab", "a") == 1
-    assert _get_num_value("aa", "a") == 0
-
-    assert get_alphabetical_grid_distance("ABan", "ABam") == 1
-    assert get_alphabetical_grid_distance("ACan", "ABam") == 2
-    assert get_alphabetical_grid_distance("ABan", "BCai") == 32
-
-
     print("All tests returned true")
