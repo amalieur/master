@@ -285,6 +285,33 @@ class DiskLSH(LSHInterface):
             hashes.append(hash)
         return hashes
 
+    
+    def _create_trajectory_hash_with_KD_tree_numerical(self, trajectory: list[list[float]]) -> list[list[str]]:
+        """ Same as above, but creates hashes that consists of the disks coordinates """
+        hashes = []
+        radius = td.get_latitude_difference(self.diameter/2)
+        for layer in self.disks.keys():
+            hash = []
+            within = []
+            tree = self.KDTrees[layer]
+            for coordinate in trajectory:
+                lat, lon = coordinate
+                for disk in within:
+                    dsklat, dsklon = self.disks[layer][disk]
+                    if td.get_euclidean_distance([lat, lon], [dsklat, dsklon]) > radius:
+                        within.remove(disk)
+
+                # Gives disk index
+                intersect_disks = tree.query_ball_point([lat,lon], radius)
+                for disk in intersect_disks:
+                    if disk not in within:
+                        within.append(disk)
+                        diskHash = tree.data[disk]
+                        hash.append(diskHash)
+            hashes.append(hash)
+        return hashes
+
+
     def compute_dataset_hashes(self) -> dict[str, list]:
         """ Method for computing the disk hashes for a given dataset. Stores the hashes in a dictionary
 
@@ -333,6 +360,18 @@ class DiskLSH(LSHInterface):
         
         return hashes
 
+    
+    def compute_dataset_hashes_with_KD_tree_numerical(self) -> dict[str, list]:
+        """Same as aboce, but returns the hashes as the disks center coordinates"""
+        files = mfh.read_meta_file(self.meta_file)
+        trajectories = fh.load_trajectory_files(files, self.data_path)
+
+        # Beginning to hash trajectories
+        hashes = dict()
+        for key in trajectories:
+            hashes[key] = self._create_trajectory_hash_with_KD_tree_numerical(trajectories[key])
+        
+        return hashes
 
 
     def measure_hash_computation(self, number: int, repeat: int) -> list[list, int]:
