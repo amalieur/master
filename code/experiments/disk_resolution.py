@@ -136,9 +136,9 @@ def plot_disk_dia_layers(city: str, layers: list[int], diameter: list[float], me
         Either "porto" or "rome", throws error unless
     layers : list[int]
         The layers that will be visualised -> [x, y, z...]
-    resolution : list[float]
-        The resolution that will be visualised -> [min, max, step]
-    measure : str (default py_edp)
+    diameter : list[float]
+        The diameter that will be visualised -> [min, max, step]
+    measure : str (default py_dtw)
         The measure that will be used. Either edit distance or dtw -> "py_ed" or "py_edp"
     reference : str (default dtw)
         The true similarities that will be used as reference. Either dtw or frechet
@@ -174,6 +174,89 @@ def plot_disk_dia_layers(city: str, layers: list[int], diameter: list[float], me
     ax1.set_ylabel("Pearson correlation coefficient \n (Solid lines)", fontsize=14)
     ax1.set_ylim([ax1.get_ylim()[0]*0.8, ax1.get_ylim()[1]])
     ax2.set_ylabel("Standard deviation \n (Dashed lines)", fontsize=14)
+    ax2.set_ylim([0, ax2.get_ylim()[1]*2])
+    ax1.tick_params(axis="both", which="major", labelsize=12)
+    ax2.tick_params(axis="both", which="major", labelsize=12)
+
+    plt.show()
+
+
+
+
+## Methods for visualusing the effect of number of disks
+
+def _fun_wrapper_corr_disks(args):
+    city, dia, lay, disks, measure, reference = args
+    Disk = _constructDisk(city, dia, lay, disks)
+    hashes = _compute_hashes(Disk, measure)
+
+    edits = _mirrorDiagonal(MEASURE[measure](hashes)).flatten()
+    corr = np.corrcoef(edits, REFERENCE[city.lower()+reference.lower()])[0][1]
+    return corr
+
+
+def _compute_disk_numbers(city: str, layers: int, diameter: int, disks: list[int], measure: str = "py_dtw", reference: str = "dtw", parallell_jobs: int = 20):
+    """ Computations for the visualisation of the number of disks"""
+    
+    pool = Pool()
+
+    results = []
+
+    for disk_number in disks:
+        print(f"DN: {disk_number}", end="\r")
+        corrs = pool.map(_fun_wrapper_corr_disks, [(city, diameter, layers, disk_number, measure, reference)for _ in range(parallell_jobs)])
+        corr = np.average(np.array(corrs))
+        std = np.std(np.array(corrs))
+        results.append([corr, disk_number, std])
+    
+    return results
+
+
+def plot_disk_numbers(city: str, layers: int, diameter: int, disks: list[int], measure: str = "py_dtw", reference: str = "dtw", parallell_jobs: int = 20):
+    """ Visualises the effect of adjusting the number of disks 
+    
+    Param
+    ---
+    city : str
+        Either "porto" or "rome", throws error unless
+    layers : int
+        The layers that will be visualised
+    diameter : list[float]
+        The resolution that will be used for the disks
+    disks : list[int]
+        The number of disks that will be plotted
+    measure : str (default py_dtw)
+        The measure that will be used. Either edit distance or dtw -> "py_ed" or "py_edp"
+    reference : str (default dtw)
+        The true similarities that will be used as reference. Either dtw or frechet
+    paralell_jobs : int (default 20)
+        Yhe number of parallell jobs that will create the data foundation
+    """
+
+    results = _compute_disk_numbers(city, layers, diameter, disks, measure, reference, parallell_jobs)
+
+    fig, ax1 = plt.subplots(figsize=(10,8), dpi=300)
+    ax2 = ax1.twinx()
+    #fig.set_size_inches(10,8)
+    cmap = plt.get_cmap('gist_ncar')
+    N = len(results)
+    
+      
+    corre, num_disks, std = list(zip(*results))
+    corre = np.array(corre)
+    num_disks = np.array(num_disks)
+    std = np.array(std)
+    ax1.plot(num_disks, corre, c=cmap(float(1.3-1)/(1.2*N)), lw=2)
+    ax2.plot(num_disks, std, c=cmap(float(1.3-1)/(1.2*N)), ls="dashed")
+    #plt.fill_between(res, np.array(corre)+np.array(std), np.array(corre)-np.array(std))
+    
+    # Now styling the figure
+    #ax1.legend(loc="lower left", ncols=3)
+    ax2.text(.99, .99, f"{city.capitalize()}/{DISTANCE_FUNC[measure]} - {reference.capitalize()}", ha='right', va='top', transform=ax2.transAxes, fontsize=12, color="grey" )
+    ax1.set_xlabel("Number of disks", fontsize=14)
+    ax1.set_ylabel("Pearson correlation coefficient \n (Solid line)", fontsize=14)
+    ax1.set_ylim([ax1.get_ylim()[0]*0.8, ax1.get_ylim()[1]])
+    ax2.set_ylabel("Standard deviation \n (Dashed line)", fontsize=14)
     ax2.set_ylim([0, ax2.get_ylim()[1]*2])
     ax1.tick_params(axis="both", which="major", labelsize=12)
     ax2.tick_params(axis="both", which="major", labelsize=12)

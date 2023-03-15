@@ -94,6 +94,7 @@ This file contains the tasks and things that need to be done during development.
 - [x] Storing test-data (benchmarks-folder)
 - [x] Implement edit-distance method for the schemes hashes
 - [x] Implement methods to measure the time similarity computation time
+  - [ ] Rewrite so that the methods use the correct hash
   - [ ] Method that saves the measurement times (perhaps as df)
   - [ ] Method that visualise the compuation time
 - [ ] Implement methods to measure the hash similarity computation time
@@ -118,7 +119,7 @@ This file contains the tasks and things that need to be done during development.
   - [ ] DTW Porto py and cy for all set-sizes
   - [ ] DTW Rome py and cy for all set-sizes
   - [ ] Frechet for ~ 100 traces for both datasets (perhaps only cy)
-- [ ] Measure the hash similarity computation time (all sets using edit-distance)
+- [ ] Measure the hash similarity computation time (Ensure correct similarity measure is used)
   - [ ] Porto Grid Hash
   - [ ] Porto Disk Hash
   - [ ] Rome Grid Hash
@@ -131,8 +132,10 @@ This file contains the tasks and things that need to be done during development.
 **RQ2 - Accuracy**
 - [ ] Measure the similarity accuracy
   - [ ] Correlation between hash computation and true similarities
-  - [ ] 
+  - [ ] Perhaps messure the deviation from true values. Meaning: How far off are the approximated values from the true values (In terms of percentage?)
 ## Figures and visualisation of data and results 
+- [ ] Correlation figures visualising the effect of the grid resolution / disk diameter and layers
+- [ ] Figure showing the effect of number of disks.
 
 ### Data
 - [x] Simple test method for plotting trajectories
@@ -155,3 +158,4 @@ Vi gar benyttet euclidean distance i disk-lsh for beregning av hashene og hvilke
 
 Kan evnt trekke inn et avsnitt der cython/python diskuteres kort og valg rundt dette under effektivitetsanalysen av hash-generering / similarity-beregning
 
+Som videre arbeid kan det være spennende å trekke frem utforsking av grid hashes med grovt rutenett. 0.6 i korrelasjon. Ref figurene som viser korrelasjon. 
