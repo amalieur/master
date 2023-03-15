@@ -134,8 +134,8 @@ This file contains the tasks and things that need to be done during development.
   - [ ] Correlation between hash computation and true similarities
   - [ ] Perhaps messure the deviation from true values. Meaning: How far off are the approximated values from the true values (In terms of percentage?)
 ## Figures and visualisation of data and results 
-- [ ] Correlation figures visualising the effect of the grid resolution / disk diameter and layers
-- [ ] Figure showing the effect of number of disks.
+- [x] Correlation figures visualising the effect of the grid resolution / disk diameter and layers
+- [x] Figure showing the effect of number of disks.
 
 ### Data
 - [x] Simple test method for plotting trajectories
