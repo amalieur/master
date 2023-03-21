@@ -94,10 +94,10 @@ This file contains the tasks and things that need to be done during development.
 - [x] Storing test-data (benchmarks-folder)
 - [x] Implement edit-distance method for the schemes hashes
 - [x] Implement methods to measure the time similarity computation time
-  - [ ] Rewrite so that the methods use the correct hash
-  - [ ] Method that saves the measurement times (perhaps as df)
-  - [ ] Method that visualise the compuation time
-- [ ] Implement methods to measure the hash similarity computation time
+  - [x] Rewrite so that the methods use the correct hash
+  - [x] Method that saves the measurement times (perhaps as df)
+  - [ ] Method that visualise the compuation time (Table is enough i think)
+- [x] Implement methods to measure the hash similarity computation time
 - [ ] Implement methods to compare dataframes containing similarities
   - [ ] Method that computes correlation
   - [ ] Method that visualises the correlations using figures
@@ -105,25 +105,26 @@ This file contains the tasks and things that need to be done during development.
 
 **important**
 - [x] Rewrite edit distance so that the distance corresponds to actual distance and not just a binary relation. Should consider DTW
-- [ ] Evaluate which distance to be used at the hashes(EDR variant working decent > correlation)
+- [x] Evaluate which distance to be used at the hashes(EDR variant working decent > correlation)
 
 ### Experiments:
 
 **RQ2 - Efficiency**
-- [ ] Measure and save the hash computation time
+- [] Measure and save the hash computation time
   - [ ] Grid Porto
   - [ ] Grid Rome
   - [ ] Disk x3 Porto
   - [ ] Disk x3 Rome
-- [ ] Measure true similarity computation time (all sets for DTW (py and cy), perhaps one for frechet)
-  - [ ] DTW Porto py and cy for all set-sizes
-  - [ ] DTW Rome py and cy for all set-sizes
-  - [ ] Frechet for ~ 100 traces for both datasets (perhaps only cy)
+  - [ ] Save the results in a table
+- [ ] Measure true similarity computation time (DTW only)
+  - [ ] DTW Porto py 
+  - [ ] DTW Rome py
+  - [ ] Frechet for ~ 100 traces for both datasets (As a curiosity more or less)
 - [ ] Measure the hash similarity computation time (Ensure correct similarity measure is used)
-  - [ ] Porto Grid Hash
-  - [ ] Porto Disk Hash
-  - [ ] Rome Grid Hash
-  - [ ] Rome Disk Hash
+  - [x] Porto Grid Hash
+  - [x] Porto Disk Hash
+  - [x] Rome Grid Hash
+  - [x] Rome Disk Hash
 - [ ] Figure and visualising
   - [ ] Computation time figures true similarities
   - [ ] Creation of hash time figures
@@ -133,6 +134,7 @@ This file contains the tasks and things that need to be done during development.
 - [ ] Measure the similarity accuracy
   - [ ] Correlation between hash computation and true similarities
   - [ ] Perhaps messure the deviation from true values. Meaning: How far off are the approximated values from the true values (In terms of percentage?)
+  - [ ] Think it is important to show that the deviation is big, and that the results are dependent on random features (random grids and random disks)
 ## Figures and visualisation of data and results 
 - [x] Correlation figures visualising the effect of the grid resolution / disk diameter and layers
 - [x] Figure showing the effect of number of disks.
@@ -159,3 +161,5 @@ Vi gar benyttet euclidean distance i disk-lsh for beregning av hashene og hvilke
 Kan evnt trekke inn et avsnitt der cython/python diskuteres kort og valg rundt dette under effektivitetsanalysen av hash-generering / similarity-beregning
 
 Som videre arbeid kan det være spennende å trekke frem utforsking av grid hashes med grovt rutenett. 0.6 i korrelasjon. Ref figurene som viser korrelasjon. 
+
+Diskutere at vi observerer at det er høy variasjon (1000 datasetettet). Hvorfor dette skjer. Hva har det å si? OSV. Dette mener jeg er et viktig punkt å trekke frem i diskusjonsdelen. 
