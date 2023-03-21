@@ -65,6 +65,31 @@ def py_edit_distance_penalty(hashes: dict[str, list[list[str]]]) -> pd.DataFrame
     return df
 
 
+def _fun_wrapper_edpp(args):
+        x,y,j = args
+        e_dist = p_edp(x,y)[0]
+        return e_dist, j
+
+def py_edit_distance_penalty_parallell(hashes: dict[str, list[list[str]]]) -> pd.DataFrame:
+    """Edit distance penalty for hashes computed in parallell"""
+ 
+    sorted_hashes = co.OrderedDict(sorted(hashes.items()))
+    num_hashes = len(sorted_hashes)
+
+    M = np.zeros((num_hashes, num_hashes))
+    pool = Pool(12)
+
+    for i, hash_i in enumerate(sorted_hashes.keys()):
+        elements = pool.map(_fun_wrapper_edpp, [(np.array(sorted_hashes[hash_i], dtype=object), np.array(sorted_hashes[traj_j], dtype=object), j) for j, traj_j in enumerate(sorted_hashes.keys()) if i>=j])
+
+        for element in elements:
+            M[i, element[1]] = element[0]
+
+    df = pd.DataFrame(M, index=sorted_hashes.keys(), columns=sorted_hashes.keys())
+
+    return df 
+
+
 def py_dtw(hashes: dict[str, list[list[float]]]) -> pd.DataFrame:
     """ Coordinate dtw as hashes"""
     sorted_hashes = co.OrderedDict(sorted(hashes.items()))
@@ -83,6 +108,32 @@ def py_dtw(hashes: dict[str, list[list[float]]]) -> pd.DataFrame:
     df = pd.DataFrame(M, index=sorted_hashes.keys(), columns=sorted_hashes.keys())
 
     return df
+
+
+def _fun_wrapper_dtw(args):
+        x,y,j = args
+        e_dist = p_dtw(x,y)
+        return e_dist, j
+
+def py_dtw_parallell(hashes: dict[str, list[list[str]]]) -> pd.DataFrame:
+    """Edit distance penalty for hashes computed in parallell"""
+ 
+    sorted_hashes = co.OrderedDict(sorted(hashes.items()))
+    num_hashes = len(sorted_hashes)
+
+    M = np.zeros((num_hashes, num_hashes))
+    pool = Pool(12)
+
+    for i, hash_i in enumerate(sorted_hashes.keys()):
+        elements = pool.map(_fun_wrapper_dtw, [(np.array(sorted_hashes[hash_i], dtype=object), np.array(sorted_hashes[traj_j], dtype=object), j) for j, traj_j in enumerate(sorted_hashes.keys()) if i>=j])
+
+        for element in elements:
+            M[i, element[1]] = element[0]
+
+    df = pd.DataFrame(M, index=sorted_hashes.keys(), columns=sorted_hashes.keys())
+
+    return df 
+
 
 
 def cy_edit_distance(hashes: dict[str, list[list[str]]]) -> pd.DataFrame:

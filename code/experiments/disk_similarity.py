@@ -7,11 +7,13 @@ Will run N processess in parallell to measure time efficiency
 from multiprocessing import Pool
 import time
 import timeit as ti
+import pandas as pd
 
 from schemes.disk_lsh import DiskLSH
 
 from utils.similarity_measures.distance import py_edit_distance as py_ed
 from utils.similarity_measures.distance import py_dtw
+from utils.similarity_measures.distance import py_dtw_parallell
 
 P_MAX_LON = -8.57
 P_MIN_LON = -8.66
@@ -54,7 +56,7 @@ def _computeSimilarities(args) -> list:
     return elapsed_time
 
 
-def measure_grid_hash_similarity_computation_time(city: str, size: int, diameter: float, layers: int, disks: int, hashtype: str, measure: str = "dtw" , parallell_jobs: int = 10) -> list:
+def measure_disk_hash_similarity_computation_time(city: str, size: int, diameter: float, layers: int, disks: int, hashtype: str, measure: str = "dtw" , parallell_jobs: int = 10) -> list:
     """
     Method to measure the execution time of similarity computation of the hashes
 
@@ -78,3 +80,33 @@ def measure_grid_hash_similarity_computation_time(city: str, size: int, diameter
         The number of jobs that will be run
     """
 
+    execution_times = []
+
+    with Pool(parallell_jobs) as pool:
+        Disk = _constructDisk(city, diameter, layers, disks, size)
+        
+        if measure == "dtw" and hashtype == "kd":
+            hashes = Disk.compute_dataset_hashes_with_KD_tree_numerical()  
+        elif measure=="ed" and hashtype == "normal":
+            hashes = Disk.compute_dataset_hashes()
+        elif measure=="ed" and hashtype == "quadrants":
+            hashes = Disk.compute_dataset_hashes_with_quad_tree()
+        elif measure == "ed" and hashtype == "kd":
+            hashes = Disk.compute_dataset_hashes_with_KD_tree()
+        else:
+            raise ValueError("Cannot construct disk hashes as input parameters are uncertain")
+
+        time_measurement = pool.map(_computeSimilarities, [(hashes,measure) for _ in range(parallell_jobs)])
+        execution_times.extend(time_measurement)
+    
+    return execution_times
+
+
+def generate_disk_hash_similarity(city: str, diameter: float, layers: int, disks: int) -> pd.DataFrame:
+    """Generates the full grid hash similarities and saves it as a dataframe """
+
+    Disk =_constructDisk(city, diameter, layers, disks, 1000)
+    hashes = Disk.compute_dataset_hashes_with_KD_tree_numerical()
+    similarities = py_dtw_parallell(hashes)
+
+    return similarities
