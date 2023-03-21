@@ -7,3 +7,5 @@ data/hashed_data/
 dependencies/
 
 __pycache__/
+
+results/
