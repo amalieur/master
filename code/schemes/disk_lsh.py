@@ -230,6 +230,35 @@ class DiskLSH(LSHInterface):
             hashes.append(hash)
         return hashes
 
+
+    def _create_trajectory_hash_numerical(self, trajectory: list[list[float]]) -> list[list[str]]:
+        """ Creates a hash for one trajectory for all layers. Returns it as a alist of length layers with a list of hashed point for each layer """
+        
+        hashes = []
+        radius = td.get_latitude_difference(self.diameter/2)
+        for layer in self.disks.keys():
+            hash = []   # The created hash
+            within = [] # The disks that the trajectory are currently within
+            disks = self.disks[layer]
+            for coordinate in trajectory:
+                lat, lon = coordinate
+                
+                # If next point no longer in disk: Remove from within list
+                for disk in within:
+                    if td.get_euclidean_distance([lat, lon], disk) > radius:
+                        within.remove(disk)
+
+                # If next point inside disk: Append to hash if not still within disk
+                # Can speed up substantially by applying a tree-structure here, naive implementation for now:
+                for i, disk in enumerate(disks):
+                    if td.get_euclidean_distance([lat, lon], disk) <= radius:
+                        if disk not in within:
+                            within.append(disk)
+                            diskHash = disk
+                            hash.append(diskHash)
+            hashes.append(hash)
+        return hashes
+    
     
     def _create_trajectory_hash_with_quad_tree(self, trajectory: list[list[float]]) -> list[list[str]]:
         """Same as above, but utilises a quad-tree-like structure for faster computation """
@@ -252,6 +281,32 @@ class DiskLSH(LSHInterface):
                         if disk not in within:
                             within.append(disk)
                             diskHash = an.get_alphabetical_value(disk.name)
+                            hash.append(diskHash)
+            hashes.append(hash)
+        return hashes
+    
+
+    def _create_trajectory_hash_with_quad_tree_numerical(self, trajectory: list[list[float]]) -> list[list[str]]:
+        """Same as above, but utilises a quad-tree-like structure for faster computation -numerical """
+        hashes = []
+        radius = td.get_latitude_difference(self.diameter/2)
+        for layer in self.disks_qt.keys():
+            hash = []
+            within = []
+            disks = self.disks_qt[layer]
+            for coordinate in trajectory:
+                lat, lon = coordinate
+                quadrant = self._get_quadrant(lat,lon, self.split_lat, self.split_lon)
+
+                for disk in within:
+                    if td.get_euclidean_distance([lat, lon], [disk.lat, disk.lon]) > radius:
+                        within.remove(disk)
+                
+                for disk in disks[quadrant]:
+                    if td.get_euclidean_distance([lat, lon], [disk.lat, disk.lon]) <= radius:
+                        if disk not in within:
+                            within.append(disk)
+                            diskHash = disk
                             hash.append(diskHash)
             hashes.append(hash)
         return hashes
@@ -387,6 +442,21 @@ class DiskLSH(LSHInterface):
             
         measures = ti.repeat(lambda: compute_hashes(trajectories, hashes), number=number, repeat=repeat, timer=time.process_time)
         return (measures, len(hashes))
+    
+
+    def measure_hash_computation_numerical(self, number: int, repeat: int) -> list[list, int]:
+        """ Method for measuring the computation time of the grid hashes. Does not change the object nor its attributes. """
+        files = mfh.read_meta_file(self.meta_file)
+        trajectories = fh.load_trajectory_files(files, self.data_path)
+        hashes = dict()
+        
+        def compute_hashes(trajectories: dict, hashes: dict):
+            for key in trajectories:
+                hashes[key] = self._create_trajectory_hash_numerical(trajectories[key])
+            return
+            
+        measures = ti.repeat(lambda: compute_hashes(trajectories, hashes), number=number, repeat=repeat, timer=time.process_time)
+        return (measures, len(hashes))
 
 
     def measure_hash_computation_with_quad_tree(self, number: int, repeat: int) -> None:
@@ -398,6 +468,21 @@ class DiskLSH(LSHInterface):
         def compute_hashes(trajectories: dict, hashes: dict):
             for key in trajectories:
                 hashes[key] = self._create_trajectory_hash_with_quad_tree(trajectories[key])
+            return
+
+        measures = ti.repeat(lambda: compute_hashes(trajectories, hashes), number=number, repeat=repeat, timer=time.process_time)
+        return (measures, len(hashes))
+    
+
+    def measure_hash_computation_with_quad_tree_numerical(self, number: int, repeat: int) -> None:
+        """ Same as above, but using quad-structure for speed improvement """
+        files = mfh.read_meta_file(self.meta_file)
+        trajectories = fh.load_trajectory_files(files, self.data_path)
+        hashes = dict()
+        
+        def compute_hashes(trajectories: dict, hashes: dict):
+            for key in trajectories:
+                hashes[key] = self._create_trajectory_hash_with_quad_tree_numerical(trajectories[key])
             return
 
         measures = ti.repeat(lambda: compute_hashes(trajectories, hashes), number=number, repeat=repeat, timer=time.process_time)
@@ -420,6 +505,22 @@ class DiskLSH(LSHInterface):
 
         return (measures, len(hashes))
 
+
+    def measure_hash_computation_with_KD_tree_numerical(self, number: int, repeat: int) -> None:
+        """ Same as above, but using KD-tree for speed improvement """
+
+        files = mfh.read_meta_file(self.meta_file)
+        trajectories = fh.load_trajectory_files(files, self.data_path)
+        hashes = dict()
+        
+        def compute_hashes(trajectories: dict, hashes: dict):
+            for key in trajectories:
+                hashes[key] = self._create_trajectory_hash_with_KD_tree_numerical(trajectories[key])
+            return
+        
+        measures = ti.repeat(lambda: compute_hashes(trajectories, hashes), number=number, repeat=repeat, timer=time.process_time)
+
+        return (measures, len(hashes))
 
     def print_hashes(self) -> None:
         """ Printing the hashes """

@@ -77,7 +77,7 @@ def fun_wrapper_p_naive(args):
     meta_file_p = f"../data/chosen_data/porto/META-{num_of_files}.txt"
     disk = DiskLSH("Porto D1", P_MIN_LAT, P_MAX_LAT, P_MIN_LON, P_MAX_LON, num_disks, layers, diameter, meta_file_p, PORTO_DATA)
     
-    return disk.measure_hash_computation(1,1)[0]
+    return disk.measure_hash_computation_numerical(1,1)[0]
 
 
 def fun_wrapper_p_quadrants(args):
@@ -91,7 +91,7 @@ def fun_wrapper_p_quadrants(args):
     meta_file_p = f"../data/chosen_data/porto/META-{num_of_files}.txt"
     disk = DiskLSH("Porto D1", P_MIN_LAT, P_MAX_LAT, P_MIN_LON, P_MAX_LON, num_disks, layers, diameter, meta_file_p, PORTO_DATA)
     
-    return disk.measure_hash_computation_with_quad_tree(1,1)[0]
+    return disk.measure_hash_computation_with_quad_tree_numerical(1,1)[0]
 
 
 def fun_wrapper_p_KD_tree(args):
@@ -105,7 +105,7 @@ def fun_wrapper_p_KD_tree(args):
     meta_file_p = f"../data/chosen_data/porto/META-{num_of_files}.txt"
     disk = DiskLSH("Porto D1", P_MIN_LAT, P_MAX_LAT, P_MIN_LON, P_MAX_LON, num_disks, layers, diameter, meta_file_p, PORTO_DATA)
    
-    return disk.measure_hash_computation_with_KD_tree(1,1)[0]
+    return disk.measure_hash_computation_with_KD_tree_numerical(1,1)[0]
 
 
 def fun_wrapper_r_naive(args):
@@ -119,7 +119,7 @@ def fun_wrapper_r_naive(args):
     meta_file_r = f"../data/chosen_data/rome/META-{num_of_files}.txt"
     disk = DiskLSH("Rome D1", R_MIN_LAT, R_MAX_LAT, R_MIN_LON, R_MAX_LON, num_disks, layers, diameter, meta_file_r, ROME_DATA)
     
-    return disk.measure_hash_computation(1,1)[0]
+    return disk.measure_hash_computation_numerical(1,1)[0]
 
 
 def fun_wrapper_r_quadrants(args):
@@ -133,7 +133,7 @@ def fun_wrapper_r_quadrants(args):
     meta_file_r = f"../data/chosen_data/rome/META-{num_of_files}.txt"
     disk = DiskLSH("Rome D1", R_MIN_LAT, R_MAX_LAT, R_MIN_LON, R_MAX_LON, num_disks, layers, diameter, meta_file_r, ROME_DATA)
     
-    return disk.measure_hash_computation_with_quad_tree(1,1)[0]
+    return disk.measure_hash_computation_with_quad_tree_numerical(1,1)[0]
 
 
 def fun_wrapper_r_KD_tree(args):
@@ -147,4 +147,4 @@ def fun_wrapper_r_KD_tree(args):
     meta_file_r = f"../data/chosen_data/rome/META-{num_of_files}.txt"
     disk = DiskLSH("Rome D1", R_MIN_LAT, R_MAX_LAT, R_MIN_LON, P_MAX_LON, num_disks, layers, diameter, meta_file_r, ROME_DATA)
     
-    return disk.measure_hash_computation_with_KD_tree(1,1)[0]
+    return disk.measure_hash_computation_with_KD_tree_numerical(1,1)[0]

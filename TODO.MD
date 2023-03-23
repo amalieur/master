@@ -110,17 +110,17 @@ This file contains the tasks and things that need to be done during development.
 ### Experiments:
 
 **RQ2 - Efficiency**
-- [] Measure and save the hash computation time
-  - [ ] Grid Porto
-  - [ ] Grid Rome
-  - [ ] Disk x3 Porto
-  - [ ] Disk x3 Rome
-  - [ ] Save the results in a table
+- [X] Measure and save the hash computation time
+  - [X] Grid Porto
+  - [X] Grid Rome
+  - [X] Disk x3 Porto
+  - [X] Disk x3 Rome
+  - [X] Save the results in TWO tables, one for the grid and one for the disks
 - [ ] Measure true similarity computation time (DTW only)
-  - [ ] DTW Porto py 
+  - [ ] DTW Porto py (Halfway there)
   - [ ] DTW Rome py
   - [ ] Frechet for ~ 100 traces for both datasets (As a curiosity more or less)
-- [ ] Measure the hash similarity computation time (Ensure correct similarity measure is used)
+- [x] Measure the hash similarity computation time (Ensure correct similarity measure is used)
   - [x] Porto Grid Hash
   - [x] Porto Disk Hash
   - [x] Rome Grid Hash
