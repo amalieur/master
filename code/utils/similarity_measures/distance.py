@@ -7,7 +7,6 @@ import timeit as ti
 import time
 
 from .py.edit_distance import edit_distance as p_ed
-from .cy.edit_distance import edit_distance as c_ed
 
 from .py.edit_distance_penalty import edit_distance_penalty as p_edp
 
@@ -136,24 +135,6 @@ def py_dtw_parallell(hashes: dict[str, list[list[str]]]) -> pd.DataFrame:
 
 
 
-def cy_edit_distance(hashes: dict[str, list[list[str]]]) -> pd.DataFrame:
-    sorted_hashes = co.OrderedDict(sorted(hashes.items()))
-    num_hashes = len(sorted_hashes)
-
-    M = np.zeros((num_hashes, num_hashes))
-    for i, hash_i in enumerate(sorted_hashes.keys()):
-        for j, hash_j in enumerate(sorted_hashes.keys()):
-            X = np.array(sorted_hashes[hash_i], dtype=object)
-            Y = np.array(sorted_hashes[hash_j], dtype=object)
-            e_dist = c_ed(X, Y)[0]
-            M[i,j] = e_dist
-            if i == j:
-                break
-
-    df = pd.DataFrame(M, index=sorted_hashes.keys(), columns=sorted_hashes.keys())
-
-    return df
-
 
 def measure_py_ed(args):
     """ 
@@ -173,10 +154,9 @@ if __name__=="__main__":
     d = {"a" : [["a","b","c","d"], ["a","b","c"]], 
         "b" : [["a", "c", "d"], ["a", "b", "d"]]    }
     print(py_edit_distance(d))
-    print(cy_edit_distance(d))
+
     t = ti.repeat(lambda: py_edit_distance(d),repeat=3,number=10000)
-    t1 = ti.repeat(lambda: cy_edit_distance(d),repeat=3,number=10000)
     print(t)
-    print(t1)
+
 
 
