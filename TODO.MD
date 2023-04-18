@@ -96,18 +96,34 @@ This file contains the tasks and things that need to be done during development.
 - [x] Implement methods to measure the time similarity computation time
   - [x] Rewrite so that the methods use the correct hash
   - [x] Method that saves the measurement times (perhaps as df)
-  - [ ] Method that visualise the compuation time (Table is enough i think)
+  - [x] Method that measure the compuation time (Table is enough i think)
 - [x] Implement methods to measure the hash similarity computation time
-- [ ] Implement methods to compare dataframes containing similarities
-  - [ ] Method that computes correlation
-  - [ ] Method that visualises the correlations using figures
-  - [ ] Method that ...
+- [x] Implement methods to compare dataframes containing similarities
+  - [x] Method that computes correlation
+  - [x] Method that visualises the correlations using figures
 
-**important**
+**Important**
 - [x] Rewrite edit distance so that the distance corresponds to actual distance and not just a binary relation. Should consider DTW
 - [x] Evaluate which distance to be used at the hashes(EDR variant working decent > correlation)
 
-### Experiments:
+---
+## Experiments:
+
+The following tasks are directly related to answering the research questions in this thesis
+
+**RQ1 - Adaptable/Reproducible to similarity computation**
+- [x] Experimental correlation with different distance measures and methods
+  - [x] Porto ED - DTW
+  - [x] Porto ED - Frechet
+  - [x] Porto DTW - DTW
+  - [x] Porto DTW - Frechet
+  - [x] Rome ED - DTW
+  - [x] Rome ED - Frechet
+  - [x] Rome DTW - DTW
+  - [x] Rome DTW - Frechet
+- [x] Use figures from early parameter determination to answer this research question
+
+
 
 **RQ2 - Efficiency**
 - [X] Measure and save the hash computation time
@@ -116,25 +132,55 @@ This file contains the tasks and things that need to be done during development.
   - [X] Disk x3 Porto
   - [X] Disk x3 Rome
   - [X] Save the results in TWO tables, one for the grid and one for the disks
-- [ ] Measure true similarity computation time (DTW only)
-  - [ ] DTW Porto py (Halfway there)
-  - [ ] DTW Rome py
+- [x] Measure true similarity computation time (DTW only)
+  - [x] DTW Porto py (Halfway there)
+  - [x] DTW Rome py
+  - [ ] Create a common figure for both cities
   - [ ] Frechet for ~ 100 traces for both datasets (As a curiosity more or less)
 - [x] Measure the hash similarity computation time (Ensure correct similarity measure is used)
   - [x] Porto Grid Hash
   - [x] Porto Disk Hash
   - [x] Rome Grid Hash
   - [x] Rome Disk Hash
-- [ ] Figure and visualising
-  - [ ] Computation time figures true similarities
-  - [ ] Creation of hash time figures
-  - [ ] Hash similarity computation times
+- [x] Figure, tables and visualising
+  - [] Computation time figures true similarities
+  - [X] Creation of hash time figures
+  - [X] Computation times hash similarities - table
 
 **RQ2 - Accuracy**
-- [ ] Measure the similarity accuracy
-  - [ ] Correlation between hash computation and true similarities
-  - [ ] Perhaps messure the deviation from true values. Meaning: How far off are the approximated values from the true values (In terms of percentage?)
+- [x] Measure the similarity accuracy
+  - [x] Correlation between hash computation and true similarities - Generated binplots over the values
   - [ ] Think it is important to show that the deviation is big, and that the results are dependent on random features (random grids and random disks)
+
+**RQ3 - Clustering**
+
+- [x] Implement HCA and AP
+- [x] Implement method that displays the clusters
+  - [ ] Might adjust tiny bit to better visability
+- [x] Rewrite to class method
+- [x] Decide which one to use - perhaps both
+  - [x] Going further with HCA, allows us to choose number of clusters. 
+- [x] Create clusters over Porto
+  - [x] Cluster with True DTW
+  - [x] Cluster with True Frechet
+  - [x] Cluster with grid hash
+  - [x] Cluster with disk hash
+- [x] Create clusters over Rome
+  - [x] Cluster with True DTW
+  - [x] Cluster with True Frechet
+  - [x] Cluster with grid hash
+  - [x] Cluster with disk hash
+- [ ] Cluster analysis:
+  - [x] Davies bouldin
+    - [x] Porto
+    - [x] Rome
+  - [ ] Rand index?
+    - [ ] Porto
+      - [ ] Both grid and disk against dtw and frechet
+    - [ ] Rome
+      - [ ] Both grid and disk against dtw and frechet
+  - [ ] Silhouette score?
+    - [ ] Evalueate this further. Do we actually gain more insight?
 ## Figures and visualisation of data and results 
 - [x] Correlation figures visualising the effect of the grid resolution / disk diameter and layers
 - [x] Figure showing the effect of number of disks.
@@ -143,7 +189,8 @@ This file contains the tasks and things that need to be done during development.
 - [x] Simple test method for plotting trajectories
 
 ### Results
-
+- [x] Symlink-folder where all csv-result-files are adjacent
+- [ ] Folder for all figures containing results.
 
 
 
@@ -162,4 +209,10 @@ Kan evnt trekke inn et avsnitt der cython/python diskuteres kort og valg rundt d
 
 Som videre arbeid kan det være spennende å trekke frem utforsking av grid hashes med grovt rutenett. 0.6 i korrelasjon. Ref figurene som viser korrelasjon. 
 
-Diskutere at vi observerer at det er høy variasjon (1000 datasetettet). Hvorfor dette skjer. Hva har det å si? OSV. Dette mener jeg er et viktig punkt å trekke frem i diskusjonsdelen. 
+Diskutere at vi observerer at det er høy variasjon (1000 datasetettet). Hvorfor dette skjer. Hva har det å si? OSV. Dette mener jeg er et viktig punkt å trekke frem i diskusjonsdelen, SKAL SÅ DEFINITIVT MED!! Mye diksusjonspotensiale i denne observasjonen. 
+
+Diskutere effekten av clustering resultat. Kan vi trekke noe reelt ut av disse resultatene. Viktig å reflektere rundt DavisBouldin indeksen og andre valgte indekser
+
+
+
+Litt usortert før jeg har generert clustere over hash-similaritetene men: Observerer at frechet distanse danner penere clustere enn dtw. Ettersom vi har høyere korrelasjon mot frechet distanse enn dtw, kan man muligens anta at clustrene vil kunne være "relativt" penere enn dtw - et interessant diskusjonspunkt i forhold til praktisk anvendelse av hash-similaritetene. 
