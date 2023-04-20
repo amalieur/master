@@ -174,13 +174,12 @@ The following tasks are directly related to answering the research questions in 
   - [x] Davies bouldin
     - [x] Porto
     - [x] Rome
-  - [ ] Rand index?
-    - [ ] Porto
-      - [ ] Both grid and disk against dtw and frechet
-    - [ ] Rome
-      - [ ] Both grid and disk against dtw and frechet
-  - [ ] Silhouette score?
-    - [ ] Evalueate this further. Do we actually gain more insight?
+  - [x] Rand index?
+    - [x] Porto
+      - [x] Both grid and disk against dtw and frechet
+    - [x] Rome
+      - [x] Both grid and disk against dtw and frechet
+
 ## Figures and visualisation of data and results 
 - [x] Correlation figures visualising the effect of the grid resolution / disk diameter and layers
 - [x] Figure showing the effect of number of disks.
