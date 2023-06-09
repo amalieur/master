@@ -12,8 +12,9 @@ This repo includes code and experiments. Experiments mainly conducted in jupyter
 - /benchmarks - code for computing the true similarities, as well as the computed similarities
 - /experiments - code for all experiments, as well as the hashed similarities and timing data.
 - /schemes - implementation of the LSH schemes (disk_lsh.py & grid_lsh.py), including the timing of hash computation.
-- /utils - Mostly helper functions used throughout this project
-- /results - Symlink folder containing similarities and timing-results
+- /utils - Mostly helper functions used throughout this project 
+
+/results - Symlink folder containing similarities and timing-results
 
 
 ## NOTES:
