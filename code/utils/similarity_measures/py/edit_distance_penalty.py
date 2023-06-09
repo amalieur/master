@@ -1,6 +1,6 @@
 import numpy as np
 
-# This is dynamic-time-warping - code was changed from edit distance - methodstring not correct!!!
+# This is dynamic-time-warping - code was changed from edit distance - names and methodstring not correct!!!
 
 
 def _get_num_value(string: str, base: str):
