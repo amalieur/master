@@ -157,14 +157,14 @@ def plot_grid_res_layers(city: str, layers: list[int], resolution: list[float], 
         #plt.fill_between(res, np.array(corre)+np.array(std), np.array(corre)-np.array(std))
     
     # Now styling the figure
-    ax1.legend(loc="lower right", ncols=3)
-    ax2.text(.99, .99, f"{city.capitalize()}/{DISTANCE_FUNC[measure]} - {reference.capitalize()}", ha='right', va='top', transform=ax2.transAxes, fontsize=12, color="grey" )
-    ax1.set_xlabel("Grid resolution (km)", fontsize=14)
-    ax1.set_ylabel("Pearson correlation coefficient \n (Solid lines)", fontsize=14)
+    ax1.legend(loc="lower right", ncols=5, fontsize=16, labelspacing=0.2, borderpad=0.2, handlelength=1, handletextpad=0.5, borderaxespad=0.2, columnspacing=1)
+    ax2.text(.99, .99, f"{city.capitalize()}/{DISTANCE_FUNC[measure]} - {reference.capitalize()}", ha='right', va='top', transform=ax2.transAxes, fontsize=14, color="grey" )
+    ax1.set_xlabel("Grid tile width (km)", fontsize=18)
+    ax1.set_ylabel("Pearson correlation coefficient - Solid lines", fontsize=18)
     ax1.set_ylim([ax1.get_ylim()[0]*0.8, ax1.get_ylim()[1]])
-    ax2.set_ylabel("Standard deviation \n (Dashed lines)", fontsize=14)
+    ax2.set_ylabel("Standard deviation - Dashed lines", fontsize=18)
     ax2.set_ylim([0, ax2.get_ylim()[1]*2])
-    ax1.tick_params(axis="both", which="major", labelsize=12)
-    ax2.tick_params(axis="both", which="major", labelsize=12)
+    ax1.tick_params(axis="both", which="major", labelsize=16)
+    ax2.tick_params(axis="both", which="major", labelsize=16)
 
     plt.show()

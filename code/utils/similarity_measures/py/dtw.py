@@ -40,7 +40,7 @@ def dtw(hash_x: np.ndarray, hash_y: np.ndarray) -> float:
         Y_len = len(Y)
 
         if (X_len == 0 or Y_len == 0):
-            cost += 3
+            cost += 0.5
             continue
 
         M = np.zeros((X_len + 1, Y_len + 1))

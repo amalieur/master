@@ -4,7 +4,8 @@ from matplotlib import colors
 import pandas as pd
 import numpy as np
 import os
-COLOR_HASH = "#69b3a2"
+COLOR_GRID_HASH = "#69b3a2"
+COLOR_DISK_HASH = "violet"
 COLOR_TRUE = "#3399e6"
 
 def draw_hash_similarity_runtime(path: str, path_to_reference: str = "") -> None:
@@ -38,7 +39,7 @@ def draw_hash_similarity_runtime(path: str, path_to_reference: str = "") -> None
         r_runtimes = rd.values
         ax2.plot(r_sizes, r_runtimes,"o", color=COLOR_TRUE, lw=2)
 
-        degree = 4
+        degree = 2
         print(data_sizes[:len(r_runtimes)])
         coeffs = np.polyfit(data_sizes[:len(r_runtimes)], r_runtimes, degree)
         p = np.poly1d(coeffs)
@@ -47,39 +48,47 @@ def draw_hash_similarity_runtime(path: str, path_to_reference: str = "") -> None
         ax2.set_ylabel("True similarity computation time (s)", fontsize=14, color=COLOR_TRUE)
         ax2.tick_params(axis="y", labelcolor=COLOR_TRUE)
     
-    ax.plot(data_sizes, data_runtimes, "xr", lw=2)
+    ax2.plot(data_sizes, data_runtimes, "xr", lw=2)
     ax.set_xlabel("Dataset size", fontsize=14)
-    ax.set_ylabel("Hash similarity computation time (s)", fontsize=14, color=COLOR_HASH)
-    ax.tick_params(axis="y", labelcolor=COLOR_HASH)
+    ax.set_ylabel("Hash similarity computation time (s)", fontsize=14, color=COLOR_GRID_HASH)
+    ax.tick_params(axis="y", labelcolor=COLOR_GRID_HASH)
 
     degree = 4
     coeffs = np.polyfit(data_sizes, data_runtimes, degree)
     p = np.poly1d(coeffs)
-    ax.plot(data_sizes, [p(n) for n in data_sizes], color=COLOR_HASH, lw=2)
+    ax2.plot(data_sizes, [p(n) for n in data_sizes], color=COLOR_GRID_HASH, lw=2)
     plt.show()
 
 
 
-def draw_hash_similarity_runtime_logarithmic(path: str, path_to_reference: str = "") -> None:
+def draw_hash_similarity_runtime_logarithmic(city: str, path_grid: str, path_disk: str, path_to_reference: str = "") -> None:
     """
     Method that draws a figure of the runtime of the hash similarity computation, logarithmic y-scale:
 
     ### Params:
     ---
-    path : str (abspath)
-        The Path to the csv file containing the runtimes
+    city : str
+        The city
+    path_grid : str (abspath)
+        The Path to the csv file containing the grid runtimes
+    path_disk : str (abspath)
+        Path to the csv file containing the disk runtimes
     path_to_reference_values : str (abspath)
         The Path to the csv file containing the reference runtimes
 
     """
 
-    timing_data = pd.read_csv(path, index_col=0)
+    grid_timing_data = pd.read_csv(path_grid, index_col=0)
+    disk_timing_data = pd.read_csv(path_disk, index_col=0)
     reference_data = pd.read_csv(path_to_reference, index_col=0) if path_to_reference else None
     
-    mean_timing = timing_data.mean(axis=0)
-    data_sizes = mean_timing.index.to_numpy(int)
-    data_runtimes = mean_timing.values
+    grid_mean_timing = grid_timing_data.mean(axis=0)
+    grid_data_sizes = grid_mean_timing.index.to_numpy(int)
+    grid_data_runtimes = grid_mean_timing.values
 
+    disk_mean_timing = disk_timing_data.mean(axis=0)
+    disk_data_sizes = disk_mean_timing.index.to_numpy(int)
+    disk_data_runtimes = disk_mean_timing.values
 
     fig, ax = plt.subplots(figsize=(10,8), dpi=300)
 
@@ -87,29 +96,36 @@ def draw_hash_similarity_runtime_logarithmic(path: str, path_to_reference: str =
     rd = reference_data.mean(axis=0)
     r_sizes = rd.index.to_numpy(int)
     r_runtimes = rd.values
-    ax.plot(r_sizes, r_runtimes,"or", lw=2)
+    ax.plot(r_sizes, r_runtimes,"or", markersize=8)
 
-    degree = 4
-    print(data_sizes[:len(r_runtimes)])
-    coeffs = np.polyfit(data_sizes[:len(r_runtimes)], r_runtimes, degree)
+    degree = 2
+    print(grid_data_sizes[:len(r_runtimes)])
+    coeffs = np.polyfit(grid_data_sizes[:len(r_runtimes)], r_runtimes, degree)
     p = np.poly1d(coeffs)
-    ax.plot(data_sizes, [p(n) for n in data_sizes], color=COLOR_TRUE, lw=2, label="True similarities")
-
+    ax.plot(grid_data_sizes, [p(n) for n in grid_data_sizes], color=COLOR_TRUE, lw=3, label="DTW Similarity")   
+    ax.plot(grid_data_sizes, grid_data_runtimes, "xr", markersize=12)
+    ax.plot(disk_data_sizes, disk_data_runtimes, "xr", markersize=12)
     
-    ax.plot(data_sizes, data_runtimes, "xr", lw=2)
-    ax.set_xlabel("Dataset size", fontsize=14)
-    ax.set_ylabel("Similarity computation time (s)", fontsize=14)
+    ax.set_xlabel("Dataset size - number of trajectories", fontsize=18)
+    ax.set_ylabel("Similarity computation time (s)", fontsize=18)
 
     ax.set_yscale("log")
     ax.tick_params(axis="y")
+    ax.tick_params(axis="both", which="major", labelsize=18)
 
     degree = 5
-    coeffs = np.polyfit(data_sizes, data_runtimes, degree)
-    p = np.poly1d(coeffs)
-    ax.plot(data_sizes, [p(n) for n in data_sizes], color=COLOR_HASH, lw=2, label="Hash similarities")
+    grid_coeffs = np.polyfit(grid_data_sizes, grid_data_runtimes, degree)
+    grid_p = np.poly1d(grid_coeffs)
+    ax.plot(grid_data_sizes, [grid_p(n) for n in grid_data_sizes], color=COLOR_GRID_HASH, lw=3, label="Grid Hash Similarity")
 
+    disk_coeffs = np.polyfit(disk_data_sizes, disk_data_runtimes, degree)
+    disk_p = np.poly1d(disk_coeffs)
+    ax.plot(disk_data_sizes, [disk_p(n) for n in disk_data_sizes], color=COLOR_DISK_HASH, lw=3, label="Disk Hash Similarity")
 
-    ax.legend(loc="lower right", ncols=3)
+    ax.text(.10, .97, f"{city}", ha='right', va='top', transform=ax.transAxes, fontsize=18, color="grey" )
+
+    ax.legend(loc="lower right", ncols=1, fontsize=18, labelspacing=0.2, borderpad=0.2, handlelength=1, handletextpad=0.5, borderaxespad=0.2, columnspacing=1)
+    plt.grid(axis = 'y', which="major")
     plt.show()
 
 
@@ -183,10 +199,10 @@ def draw_similarity_correlation(hash_sim_path: str, city: str, hash_type: str, r
     fig, ax = plt.subplots(figsize=(10,8), dpi=300)
 
     ax.hist2d(x, true_sims[city][reference_measure], bins=hist_arr[city][hash_type][reference_measure], cmap ="turbo")
-    ax.set_ylabel(f"{reference_measure.upper()} distance", fontsize=16)
-    ax.set_xlabel(f"{hash_type.capitalize()} scheme distance", fontsize=16)
-    ax.tick_params(axis="both", which="major", labelsize=14)
-    ax.text(.99, .04, f"{hash_type.capitalize()}/{city.capitalize()} - Correlation: {'{:.2f}'.format(corr)}", ha='right', va='top', transform=ax.transAxes, fontsize=14, color="white" )
+    ax.set_ylabel(f"{reference_measure.upper()} distance", fontsize=18)
+    ax.set_xlabel(f"{hash_type.capitalize()} scheme distance", fontsize=18)
+    ax.tick_params(axis="both", which="major", labelsize=18)
+    ax.text(.99, .04, f"{hash_type.capitalize()}/{city.capitalize()} - Correlation: {'{:.2f}'.format(corr)}", ha='right', va='top', transform=ax.transAxes, fontsize=16, color="white" )
     #ax.hist2d(x, true_sims[city]["fre"], bins=hist_arr[city][hash_type]["fre"], cmap="turbo")
   
     plt.show()

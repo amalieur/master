@@ -191,9 +191,23 @@ The following tasks are directly related to answering the research questions in 
 - [x] Symlink-folder where all csv-result-files are adjacent
 - [ ] Folder for all figures containing results.
 
-
-
-
+# Things that should be included in the thesis
+## Introduction
+- [ ] Introduction
+  - [ ] Include an "Outline" chapter which briefly explains what is included in the different sections
+  - [ ] Should also write in the outline section that the theory and relevant works chapter is based on the work from the autumn project
+## Theory
+- [ ] Theory
+  - [ ] Perhaps add some more on the topic off locality senstive hashing. Make sure that it is highly understandable for the thesis. Should rewrite the section so that it is more in touch with the version we have used in our project. Presenter først vanlig teori, for så å si at ved å ta utgangspunkt i prinsippet om datalokalitet gjennom hashing, kan bruke teknikken til mer enn bare near-neighbour. Vårt øsnke er å se om det fungerer som distansemål også. 
+  - [ ] Remove Affinity Propagation from the clustering subchapter -  no need to include it as I am not using it.
+  - [ ] Write more on the topic of rand index. What is it intuitively and so on... What does the score mean? (Share of common objects over the share of common objects and uncommon objects) 
+  - [ ] Remove Silhouette coefficient - not in use
+ 
+## Relevant Work
+- [ ] Relevant work
+  - [ ] Should be fine for now
+  
+## Methodology
 
 
 # Aspects to potentially be included in the discussion:
@@ -204,14 +218,29 @@ Også et avsnitt om hvorvidt generering av diskLSH hashes har tilstrekkelig kjø
 
 Vi gar benyttet euclidean distance i disk-lsh for beregning av hashene og hvilke disker et punkt befinner seg i. Dette gir ikke en riktig fremstilling av en disk, mer en ellipseform grunnet at geo-koordinater (lat,lon) ligger til grunn for avstandsberegningene. For økt nøykatightet kunne det vært spennende å se hvorvidt det faktisk har en innvirkning. Uansett mener vi at avveiingen some er gjort tilfreddstiller "kravene" bak disk-based LSH av trajectories. 
 
-Kan evnt trekke inn et avsnitt der cython/python diskuteres kort og valg rundt dette under effektivitetsanalysen av hash-generering / similarity-beregning
 
 Som videre arbeid kan det være spennende å trekke frem utforsking av grid hashes med grovt rutenett. 0.6 i korrelasjon. Ref figurene som viser korrelasjon. 
 
-Diskutere at vi observerer at det er høy variasjon (1000 datasetettet). Hvorfor dette skjer. Hva har det å si? OSV. Dette mener jeg er et viktig punkt å trekke frem i diskusjonsdelen, SKAL SÅ DEFINITIVT MED!! Mye diksusjonspotensiale i denne observasjonen. 
+
 
 Diskutere effekten av clustering resultat. Kan vi trekke noe reelt ut av disse resultatene. Viktig å reflektere rundt DavisBouldin indeksen og andre valgte indekser
 
 
-
 Litt usortert før jeg har generert clustere over hash-similaritetene men: Observerer at frechet distanse danner penere clustere enn dtw. Ettersom vi har høyere korrelasjon mot frechet distanse enn dtw, kan man muligens anta at clustrene vil kunne være "relativt" penere enn dtw - et interessant diskusjonspunkt i forhold til praktisk anvendelse av hash-similaritetene. 
+
+
+- [ ] Diskutere effekten av gridoppløsning/ antall disker.
+
+
+Svært viktig at jeg diskuterer det faktum at selv om diskhash oppnådde bedre resultater enn gridhash, så er det potensielt et resultat av bedre konfigurasjon. Ved å øke antallet lag/ grid-oppløsning og tilsvarende for diskhashene vil man kunne oppnå høyere nøyaktighet osv. Eksperimentene våre har vist noe bedre nøyaktighet for diskhash, men diskhashsimilarity hadde også litt lenger kjøretid -> Kunne man fått økt nøyaktigheten til gridsene om man hadde endret parametrene til mer finkornede slik at kjøretiden hadde blitt den samme? Bare et tankesprang det her. Men viktig å få med at hashene tilbyr en tradeoff mellom kjøretid og nøyaktighet.
+
+
+- [ ] Også drøfte litt rundt at test-eksperimentene ha en høyere korrelasjon mot sannhetsverdiene enn det som var tilfelle når similaritetene for hele datasettet ble beregnet. (Korrelasjonen som er på 2dhistogrammene). Kan det skyldes at økningen i antall spor burde ha mer finmaskede grids for å skille sporene bedre? Ser ikke helt den samme effekten for disks, men det er en liten endring her også... 
+
+
+
+# Konklusjon
+  Vi har vist at disk og grid fungerer godt til formålet dersom parametrene er innenfor riktig vindu. Dvs innenfor akseptabel tidskompleksitet, men samtidig store nok til at høy korrelasjon med sanne verdier er vedlikeholdt. 
+  Vi har derfor vist at LSH-skjemaene er gjenbrukbare til similaritetsberegning, dog med noe redusert nøyaktighet, men til gjengjeld kraftig redusert kjøretid.
+
+  Vi har i 2d-histogrammene sett at grid-verdiene er litt mer spredte enn det man hadde håpet på, men at korrelasjonen fortsatt er akseptabel. Diskene har bedre korrelasjon, hvilket tydelig fremkommer av hsitogrammene. Spredningen er key her.  

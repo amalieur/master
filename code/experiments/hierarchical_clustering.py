@@ -90,6 +90,7 @@ class HCA():
                 j+=1
         for ax in fig.get_axes():
             ax.label_outer()
+            ax.tick_params(axis="both", which="major", labelsize=18)
 
         plt.show()
 
