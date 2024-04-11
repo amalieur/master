@@ -48,13 +48,13 @@ def plot_clusters(clusters: np.array, city: str):
     ---
     clusters : List[clusterindex]
         The clusters derived from agglomerative clustering
-    city : str (porto | rome)
+    city : str (porto)
         The city that should be clustered
     """
     n_clusters = len(set(clusters))
 
-    DATA_FOLDER = f"../data/chosen_data/{city}/"
-    META_FILE = f"../data/chosen_data/{city}/META-1000.txt"
+    DATA_FOLDER = f"../data/chosen_data/porto/"
+    META_FILE = f"../data/chosen_data/porto/META-1000.txt"
 
     files = mfh.read_meta_file(META_FILE)
     trajectories = fh.load_trajectory_files(files, DATA_FOLDER)

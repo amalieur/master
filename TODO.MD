@@ -18,16 +18,6 @@ This file contains the tasks and things that need to be done during development.
 - [x] Ensure traces with invalid data points are removed
 - [x] Abiltiy to write trajectories to files and to clear old files
 
-
-
-### **Rome**
-
-- [x] Concatenate the traces from one row per point to one row with a list of points
-- [x] Ensure data are within bounded rectangle
-- [x] Ensure all traces hold the minimum length
-- [x] Remove traces with invalid data points
-- [x] Abiltiy to write trajectories to files and to clear old files when refreshing data set
-
 ### Common
 
 - [x] Split datasets using meta-files (100 - 200 - ... - 1000)
@@ -85,10 +75,9 @@ This file contains the tasks and things that need to be done during development.
 - [x] Create a procedure-oriented notebook for the benchmarks
 - [x] Creation of similarity data (DTW - true similarities)
   - [X] Porto
-  - [X] Rome
+
 - [X] Creation of similarity data (Frechet - true similarities (SLOW as hell... -> Should be a one-time job but still slooooow :/))
   - [x] Porto
-  - [X] Rome
 - [x] Storing test-data (benchmarks-folder)
 - [x] Implement edit-distance method for the schemes hashes
 - [x] Implement methods to measure the time similarity computation time
@@ -115,10 +104,6 @@ The following tasks are directly related to answering the research questions in 
   - [x] Porto ED - Frechet
   - [x] Porto DTW - DTW
   - [x] Porto DTW - Frechet
-  - [x] Rome ED - DTW
-  - [x] Rome ED - Frechet
-  - [x] Rome DTW - DTW
-  - [x] Rome DTW - Frechet
 - [x] Use figures from early parameter determination to answer this research question
 
 
@@ -126,19 +111,14 @@ The following tasks are directly related to answering the research questions in 
 **RQ2 - Efficiency**
 - [X] Measure and save the hash computation time
   - [X] Grid Porto
-  - [X] Grid Rome
   - [X] Disk x3 Porto
-  - [X] Disk x3 Rome
   - [X] Save the results in TWO tables, one for the grid and one for the disks
 - [x] Measure true similarity computation time (DTW only)
   - [x] DTW Porto py (Halfway there)
-  - [x] DTW Rome py
   - [x] Create a common figure for both cities
 - [x] Measure the hash similarity computation time (Ensure correct similarity measure is used)
   - [x] Porto Grid Hash
   - [x] Porto Disk Hash
-  - [x] Rome Grid Hash
-  - [x] Rome Disk Hash
 - [x] Figure, tables and visualising
   - [] Computation time figures true similarities
   - [X] Creation of hash time figures
@@ -162,19 +142,11 @@ The following tasks are directly related to answering the research questions in 
   - [x] Cluster with True Frechet
   - [x] Cluster with grid hash
   - [x] Cluster with disk hash
-- [x] Create clusters over Rome
-  - [x] Cluster with True DTW
-  - [x] Cluster with True Frechet
-  - [x] Cluster with grid hash
-  - [x] Cluster with disk hash
 - [ ] Cluster analysis:
   - [x] Davies bouldin
     - [x] Porto
-    - [x] Rome
   - [x] Rand index?
     - [x] Porto
-      - [x] Both grid and disk against dtw and frechet
-    - [x] Rome
       - [x] Both grid and disk against dtw and frechet
 
 ## Figures and visualisation of data and results 

@@ -9,12 +9,10 @@ from .file_handler import load_all_trajectory_files
 
 DATASETS = {
     "P_" : "Porto",
-    "R_" : "Rome"
 }
 
 BIN_SIZE = {
     "P_" : 1,
-    "R_" : 5,
 }
 
 

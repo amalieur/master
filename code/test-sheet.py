@@ -70,10 +70,8 @@ if __name__=="__main__":
 
 """ 
 create_trajectory_length_histogram("./data/chosen_data/porto/","P_")
-create_trajectory_length_histogram("./data/chosen_data/rome/","R_")
 
 a, ami, ama = create_trajectory_length_stats("./data/chosen_data/porto/","P_")
-b, bmi, bma = create_trajectory_length_stats("./data/chosen_data/rome/", "R_")
 
 print(int(a), ami, ama)
 print(int(b), bmi, bma)

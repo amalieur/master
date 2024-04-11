@@ -11,7 +11,7 @@ def _mirrorDiagonal(M: np.ndarray ) -> np.ndarray:
     return M.values + np.rot90(np.fliplr(M.values))
 
 
-path_to_distances = os.path.abspath("C:\\Users\\bafla\\Desktop\\Projects\\master\\code\\benchmarks\\similarities\\rome-dtw.csv")
+path_to_distances = os.path.abspath("C:\\Users\\47412\\master\\lsh-kode\\master\\code\\benchmarks\\similarities\\porto-dtw.csv")
 
 distances = _mirrorDiagonal(pd.read_csv(path_to_distances, index_col=0))
 print(distances)

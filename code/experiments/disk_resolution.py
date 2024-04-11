@@ -31,28 +31,18 @@ def _mirrorDiagonal(M: np.ndarray ) -> np.ndarray:
 P_DTW = _mirrorDiagonal(pd.read_csv("./benchmarks/similarities/porto-dtw-test.csv", index_col=0)).flatten() #.stack().values
 P_FRE = _mirrorDiagonal(pd.read_csv("./benchmarks/similarities/porto-frechet-test.csv", index_col=0)).flatten() #.stack().values
 
-R_DTW = _mirrorDiagonal(pd.read_csv("./benchmarks/similarities/rome-dtw-test.csv", index_col=0)).flatten() #.stack().values
-R_FRE = _mirrorDiagonal(pd.read_csv("./benchmarks/similarities/rome-frechet-test.csv", index_col=0)).flatten() #.stack().values
-
 # Some constants
 
 PORTO_CHOSEN_DATA = "../data/chosen_data/porto/"
 PORTO_HASHED_DATA = "../data/hashed_data/grid/porto/"
 PORTO_META_TEST = "../data/hashed_data/grid/porto/META-50.TXT"
 
+# SE PÅ DENNE SENERE
 P_MAX_LON = -8.57
 P_MIN_LON = -8.66
 P_MAX_LAT = 41.19
 P_MIN_LAT = 41.14
 
-ROME_CHOSEN_DATA = "../data/chosen_data/rome/"
-ROME_HASHED_DATA = "../data/hashed_data/grid/rome/"
-ROME_META_TEST = "../data/hashed_data/grid/rome/META-50.TXT"
-
-R_MAX_LON = 12.53
-R_MIN_LON = 12.44
-R_MAX_LAT = 41.93
-R_MIN_LAT = 41.88
 
 MEASURE = {
     "py_ed" : py_ed,
@@ -62,8 +52,6 @@ MEASURE = {
 REFERENCE = {
     "portodtw" : P_DTW,
     "portofrechet" : P_FRE,
-    "romedtw" : R_DTW,
-    "romefrechet" : R_FRE
 }
 
 DISTANCE_FUNC = {
@@ -76,10 +64,8 @@ def _constructDisk(city: str, diameter: float, layers: int, disks:int=50) -> Dis
     """ Constructs a grid hash object over the given city """
     if city.lower() == "porto":
         return DiskLSH(f"GP_{layers}-{'{:.2f}'.format(diameter)}", P_MIN_LAT, P_MAX_LAT, P_MIN_LON, P_MAX_LON, disks, layers, diameter, PORTO_META_TEST, PORTO_CHOSEN_DATA)
-    elif city.lower() == "rome":
-        return DiskLSH(f"GR_{layers}-{'{:.2f}'.format(diameter)}", R_MIN_LAT, R_MAX_LAT, R_MIN_LON, R_MAX_LON, disks, layers, diameter, ROME_META_TEST, ROME_CHOSEN_DATA)
     else:
-        raise ValueError("City argument must be either porto or rome")
+        raise ValueError("City argument must be porto")
 
 
 def _compute_hashes(disk: DiskLSH, measure: str = "py_ed") -> dict[str,list]:

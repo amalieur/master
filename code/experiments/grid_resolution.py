@@ -31,15 +31,6 @@ P_MIN_LON = -8.66
 P_MAX_LAT = 41.19
 P_MIN_LAT = 41.14
 
-ROME_CHOSEN_DATA = "../data/chosen_data/rome/"
-ROME_HASHED_DATA = "../data/hashed_data/grid/rome/"
-ROME_META_TEST = "../data/hashed_data/grid/rome/META-50.TXT"
-
-R_MAX_LON = 12.53
-R_MIN_LON = 12.44
-R_MAX_LAT = 41.93
-R_MIN_LAT = 41.88
-
 MEASURE = {
     "py_ed" : py_ed,
     "py_edp" : py_edp,
@@ -55,18 +46,13 @@ def _constructGrid(city: str, res: float, layers: int) -> GridLSH:
     """ Constructs a grid hash object over the given city """
     if city.lower() == "porto":
         return GridLSH(f"GP_{layers}-{'{:.2f}'.format(res)}", P_MIN_LAT, P_MAX_LAT, P_MIN_LON, P_MAX_LON, res, layers, PORTO_META_TEST, PORTO_CHOSEN_DATA)
-    elif city.lower() == "rome":
-        return GridLSH(f"GR_{layers}-{'{:.2f}'.format(res)}", R_MIN_LAT, R_MAX_LAT, R_MIN_LON, R_MAX_LON, res, layers, ROME_META_TEST, ROME_CHOSEN_DATA)
     else:
-        raise ValueError("City argument must be either porto or rome")
+        raise ValueError("City argument must be porto")
 
 # True similarities:
 
 P_DTW = _mirrorDiagonal(pd.read_csv("./benchmarks/similarities/porto-dtw-test.csv", index_col=0)).flatten() #.stack().values
 P_FRE = _mirrorDiagonal(pd.read_csv("./benchmarks/similarities/porto-frechet-test.csv", index_col=0)).flatten() #.stack().values
-
-R_DTW = _mirrorDiagonal(pd.read_csv("./benchmarks/similarities/rome-dtw-test.csv", index_col=0)).flatten() #.stack().values
-R_FRE = _mirrorDiagonal(pd.read_csv("./benchmarks/similarities/rome-frechet-test.csv", index_col=0)).flatten() #.stack().values
 
 #P_dtw_mirrored = mirrorDiagonal(P_dtw).flatten()
 #P_fre_mirrored = mirrorDiagonal(P_fre).flatten()
@@ -74,8 +60,6 @@ R_FRE = _mirrorDiagonal(pd.read_csv("./benchmarks/similarities/rome-frechet-test
 REFERENCE = {
     "portodtw" : P_DTW,
     "portofrechet" : P_FRE,
-    "romedtw" : R_DTW,
-    "romefrechet" : R_FRE
 }
 
 DISTANCE_FUNC = {

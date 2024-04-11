@@ -28,11 +28,7 @@ R_MIN_LAT = 41.88
 PORTO_CHOSEN_DATA = "../data/chosen_data/porto/"
 PORTO_HASHED_DATA = "../data/hashed_data/grid/porto/"
 
-ROME_CHOSEN_DATA = "../data/chosen_data/rome/"
-ROME_HASHED_DATA = "../data/hashed_data/grid/rome/"
-
 def PORTO_META(size: int): return f"../data/hashed_data/grid/porto/META-{size}.TXT"
-def ROME_META(size: int): return f"../data/hashed_data/grid/rome/META-{size}.TXT"
 
 MEASURE = {
     "ed" : py_ed,
@@ -43,10 +39,8 @@ def _constructGrid(city: str, res: float, layers: int, size: int) -> GridLSH:
     """ Constructs a grid hash object over the given city """
     if city.lower() == "porto":
         return GridLSH(f"GP_{layers}-{'{:.2f}'.format(res)}", P_MIN_LAT, P_MAX_LAT, P_MIN_LON, P_MAX_LON, res, layers, PORTO_META(size), PORTO_CHOSEN_DATA)
-    elif city.lower() == "rome":
-        return GridLSH(f"GR_{layers}-{'{:.2f}'.format(res)}", R_MIN_LAT, R_MAX_LAT, R_MIN_LON, R_MAX_LON, res, layers, ROME_META(size), ROME_CHOSEN_DATA)
     else:
-        raise ValueError("City argument must be either porto or rome")
+        raise ValueError("City argument must be porto")
     
 
 def _computeSimilarities(args) -> list:

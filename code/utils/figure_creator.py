@@ -152,17 +152,10 @@ def draw_similarity_correlation(hash_sim_path: str, city: str, hash_type: str, r
     
     porto_dtw = _mirrorDiagonal(pd.read_csv(os.path.abspath("./benchmarks/similarities/porto-dtw.csv"), index_col=0)).flatten()
     porto_fre = _mirrorDiagonal(pd.read_csv(os.path.abspath("./benchmarks/similarities/porto-frechet.csv"), index_col=0)).flatten()
-    rome_dtw = _mirrorDiagonal(pd.read_csv(os.path.abspath("./benchmarks/similarities/rome-dtw.csv"), index_col=0)).flatten()
-    rome_fre = _mirrorDiagonal(pd.read_csv(os.path.abspath("./benchmarks/similarities/rome-frechet.csv"), index_col=0)).flatten()
-    
     true_sims = {
         "porto" : {
             "dtw" : porto_dtw,
             "frechet" : porto_fre
-        },
-        "rome" : {
-            "dtw" : rome_dtw,
-            "frechet" : rome_fre
         }
     }
 
@@ -175,16 +168,6 @@ def draw_similarity_correlation(hash_sim_path: str, city: str, hash_type: str, r
             "disk" : {
                 "dtw" : (np.arange(0, 4, 0.05), np.arange(0, 3, 0.05)),
                 "frechet" : (np.arange(0, 4, 0.05), np.arange(0, 0.08, 0.001)),
-            }
-        },
-        "rome" : {
-            "grid" : {
-                "dtw" : (np.arange(0, 15, 0.2), np.arange(0, 6, 0.05)),
-                "frechet" : (np.arange(0, 15, 0.2), np.arange(0, 0.10, 0.001))
-            },
-            "disk" : {
-                "dtw" : (np.arange(0, 3, 0.05), np.arange(0, 6, 0.05)),
-                "frechet" : (np.arange(0, 3, 0.05), np.arange(0, 0.10, 0.001))
             }
         }
     }

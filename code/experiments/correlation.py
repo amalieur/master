@@ -17,18 +17,14 @@ def compute_correlation_similarity(city: str, scheme: str, runs: int):
     
     porto_dtw = _mirrorDiagonal(pd.read_csv(os.path.abspath("../code/benchmarks/similarities/porto-dtw.csv"), index_col=0)).flatten()
     porto_fre = _mirrorDiagonal(pd.read_csv(os.path.abspath("../code/benchmarks/similarities/porto-frechet.csv"), index_col=0)).flatten()
-    rome_dtw = _mirrorDiagonal(pd.read_csv(os.path.abspath("../code/benchmarks/similarities/rome-dtw.csv"), index_col=0)).flatten()
-    rome_fre = _mirrorDiagonal(pd.read_csv(os.path.abspath("../code/benchmarks/similarities/rome-frechet.csv"), index_col=0)).flatten()
 
     
 #    similarities = {
 #        "grid" : {
-#            "porto" : generate_grid_hash_similarity("porto", 1.6, 5),
-#            "rome" : generate_grid_hash_similarity("rome", 1.2, 4)
+#            "porto" : generate_grid_hash_similarity("porto", 1.6, 5)
 #        },
 #        "disk" : {
-#            "porto" : generate_disk_hash_similarity("porto", 2.2, 4, 60),
-#            "rome" : generate_disk_hash_similarity("rome", 1.6, 5, 50)
+#            "porto" : generate_disk_hash_similarity("porto", 2.2, 4, 60)
 #        }
 #    }
 
@@ -36,10 +32,6 @@ def compute_correlation_similarity(city: str, scheme: str, runs: int):
         "porto" : {
             "dtw" : porto_dtw,
             "fre" : porto_fre
-        },
-        "rome" : {
-            "dtw" : rome_dtw,
-            "fre" : rome_fre
         }
     }
 
@@ -57,10 +49,6 @@ def compute_correlation_similarity(city: str, scheme: str, runs: int):
             hash_sims = generate_grid_hash_similarity("porto", 1.6, 5)
         elif city.lower() == "porto" and scheme.lower() == "disk":
             hash_sims = generate_disk_hash_similarity("porto", 2.2, 4, 60)
-        elif city.lower() == "rome" and scheme.lower() == "grid":
-            hash_sims = generate_grid_hash_similarity("rome", 1.2, 4)
-        else: 
-            hash_sims = generate_disk_hash_similarity("rome", 1.6, 5, 50)
 
         h_sims =  _mirrorDiagonal(hash_sims).flatten()
         correlation_dtw.append(np.corrcoef(h_sims, true_sims[city]["dtw"])[0][1])
