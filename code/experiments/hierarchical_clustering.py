@@ -35,7 +35,7 @@ class HCA():
         import warnings
         warnings.filterwarnings("ignore", category=DeprecationWarning)
         
-        model = AgglomerativeClustering(n_clusters=self.n_clusters, affinity="euclidean", linkage="ward")        
+        model = AgglomerativeClustering(n_clusters=self.n_clusters, metric="euclidean", linkage="ward")        
         clusters = model.fit_predict(self.distances)
         
         return model, clusters
