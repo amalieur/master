@@ -24,7 +24,8 @@ from utils.similarity_measures.distance import py_edit_distance_penalty as py_ed
 
 PORTO_CHOSEN_DATA = "../data/chosen_data/porto/"
 PORTO_HASHED_DATA = "../data/hashed_data/grid/porto/"
-PORTO_META_TEST = "../data/hashed_data/grid/porto/META-50.TXT"
+PORTO_META_TEST = "../data/hashed_data/grid/porto/META-50.txt"
+
 
 P_MAX_LON = -8.57
 P_MIN_LON = -8.66

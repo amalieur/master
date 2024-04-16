@@ -14,7 +14,7 @@ from multiprocessing import Pool
 #p.nice(psutil.REALTIME_PRIORITY_CLASS)
 
 abs_path = os.path.dirname(__file__)
-rel_path = "../data/chosen_data/porto/META-200.TXT"
+rel_path = "../data/chosen_data/porto/META-200.txt"
 ful_path = os.path.join(abs_path, rel_path)
 
 data_path = os.path.join(abs_path, "../data/chosen_data/porto/")
