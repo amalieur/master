@@ -35,7 +35,7 @@ P_FRE = _mirrorDiagonal(pd.read_csv("./benchmarks/similarities/porto-frechet-tes
 
 PORTO_CHOSEN_DATA = "../data/chosen_data/porto/"
 PORTO_HASHED_DATA = "../data/hashed_data/grid/porto/"
-PORTO_META_TEST = "../data/hashed_data/grid/porto/META-50.TXT"
+PORTO_META_TEST = "../data/hashed_data/grid/porto/META-50.txt"
 
 # SE PÅ DENNE SENERE
 P_MAX_LON = -8.57
@@ -159,7 +159,7 @@ def plot_disk_dia_layers(city: str, layers: list[int], diameter: list[float], me
     ax1.set_xlabel("Disk diameter (km)", fontsize=18)
     ax1.set_ylabel("Pearson correlation coefficient - Solid lines", fontsize=18)
     ax1.set_ylim([ax1.get_ylim()[0]*0.8, ax1.get_ylim()[1]])
-    ax2.set_ylabel("Standard deviation \- Dashed lines", fontsize=18)
+    ax2.set_ylabel("Standard deviation - Dashed lines", fontsize=18)
     ax2.set_ylim([0, ax2.get_ylim()[1]*2])
     ax1.tick_params(axis="both", which="major", labelsize=16)
     ax2.tick_params(axis="both", which="major", labelsize=16)
