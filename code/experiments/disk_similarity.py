@@ -29,7 +29,7 @@ PORTO_CHOSEN_DATA = "../data/chosen_data/porto/"
 PORTO_HASHED_DATA = "../data/hashed_data/grid/porto/"
 
 
-def PORTO_META(size: int): return f"../data/hashed_data/grid/porto/META-{size}.TXT"
+def PORTO_META(size: int): return f"../data/hashed_data/grid/porto/META-{size}.txt"
 
 MEASURE = {
     "ed" : py_ed,
