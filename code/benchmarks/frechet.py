@@ -11,7 +11,7 @@ import time
 from traj_dist.pydist.frechet import frechet as p_frechet
 from traj_dist.distance import frechet as c_frechet
 
-def py_frechet(trajectories: dict[str, list[list[float]]]) -> pd.DataFrame:
+def py_frechet(trajectories: dict[str, list[list[int]]]) -> pd.DataFrame:
     """ 
     Method for computing frechet similarity between all trajectories in a given dataset using python. 
 
@@ -55,7 +55,7 @@ def measure_py_frechet(args):
 
 
 
-def cy_frechet(trajectories: dict[str, list[list[float]]]) -> pd.DataFrame:
+def cy_frechet(trajectories: dict[str, list[list[int]]]) -> pd.DataFrame:
     """ 
     Method for computing frechet similarity between all trajectories in a given dataset using cython. 
 
@@ -101,7 +101,7 @@ def _fun_wrapper(args):
         frechet = c_frechet(x,y)
         return frechet, j
 
-def cy_frechet_pool(trajectories: dict[str, list[list[float]]]) -> pd.DataFrame:
+def cy_frechet_pool(trajectories: dict[str, list[list[int]]]) -> pd.DataFrame:
     """
     Same as above, but using a pool of procesess for speedup
     """
