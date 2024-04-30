@@ -22,7 +22,7 @@ from utils.similarity_measures.distance import py_edit_distance_penalty as py_ed
 
 # Defining some constants
 
-PORTO_CHOSEN_DATA = "../data/chosen_data/porto/"
+PORTO_CHOSEN_DATA = "../data/chosen_data/subset-100000/"
 PORTO_HASHED_DATA = "../data/hashed_data/grid/porto/"
 PORTO_META_TEST = "../data/hashed_data/grid/porto/META-50.txt"
 

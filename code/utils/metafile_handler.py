@@ -10,7 +10,7 @@ import numpy as np
 
 
 
-def create_meta_files(path_to_files: str, data_prefix: str, prefix: str = "META", number: int = 100, create_test_set: bool = False, test_set_size: int = 50) -> None:
+def create_meta_file(path_to_files: str, data_prefix: str, prefix: str = "META") -> None:
     """
     Function that creates metafiles (data-sets) with an incresing number of files containing random itemes from the chosen data.
 
@@ -21,38 +21,23 @@ def create_meta_files(path_to_files: str, data_prefix: str, prefix: str = "META"
     data_prefix: str
         The prefix of the data that will be used in the sets
     prefix: str (default "META")
-        The prefix of the meta_files
-    number: int (default 100)
-        The number of files that should be added to each set
-    create_test_set: boolean (default True)
-        Set this to true if a test set should be generated
-    test_set_size: int (default 50)
-        Preferred size of the testset
+        The prefix of the meta_file
     """
 
     file_list = [file for file in os.listdir(path_to_files) if re.match(r'\b' + re.escape(data_prefix) + r'[^\\]*\.txt$', file)]
 
-    random.shuffle(file_list)
-
-    data_set_sizes =  np.arange(number, len(file_list)+1, number).tolist()
-    if create_test_set: data_set_sizes.append(test_set_size)
-
-
-    for size in data_set_sizes:
-        si = 0
-        with open(f'{path_to_files}/{prefix}-{size}.txt','w') as file:
-            for file_name in file_list[0:size]:
-                file.write("%s\n" % (file_name))
-                si+=1
-            file.close()
+    with open(f'{path_to_files}/{prefix}.txt','w') as file:
+        for file_name in file_list:
+            file.write("%s\n" % (file_name))
+        file.close()
     
     return
 
 
 
-def get_meta_files(path_to_files: str, prefix: str = "META") -> list:
+def get_meta_file(path_to_files: str, prefix: str = "META") -> list:
     """
-    Function that returns the metafiles in the given folder
+    Function that returns the metafile in the given folder
 
     Parameters
     ----------
@@ -67,7 +52,7 @@ def get_meta_files(path_to_files: str, prefix: str = "META") -> list:
     return file_list
 
 
-def delete_meta_files(path_to_files: str, prefix: str = "META") -> None:
+def delete_meta_file(path_to_files: str, prefix: str = "META") -> None:
     """
     Function that deletes the metafiles in the given folder
 
