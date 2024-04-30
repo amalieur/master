@@ -12,7 +12,7 @@ import timeit as ti
 import time
 
 
-def py_dtw(trajectories: dict[str, list[list[float]]]) -> pd.DataFrame:
+def py_dtw(trajectories: dict[str, list[list[int]]]) -> pd.DataFrame:
     """ 
     Method for computing DTW similarity between all trajectories in a given dataset using python. 
 
@@ -59,7 +59,7 @@ def measure_py_dtw(args):
 
 
 
-def cy_dtw(trajectories: dict[str, list[list[float]]]) -> pd.DataFrame:
+def cy_dtw(trajectories: dict[str, list[list[int]]]) -> pd.DataFrame:
     """ 
     Method for computing DTW similarity between all trajectories in a given dataset using cython. 
 
@@ -107,7 +107,7 @@ def _fun_wrapper(args):
         dtw = c_dtw(x,y)
         return dtw, j
 
-def cy_dtw_pool(trajectories: dict[str, list[list[float]]]) -> pd.DataFrame:
+def cy_dtw_pool(trajectories: dict[str, list[list[int]]]) -> pd.DataFrame:
     """
     Same as above, but using a pool of procesess for speedup
     """

@@ -11,11 +11,11 @@ def _mirrorDiagonal(M: np.ndarray ) -> np.ndarray:
     return M.values + np.rot90(np.fliplr(M.values))
 
 
-path_to_distances = os.path.abspath("C:\\Users\\47412\\master\\lsh-kode\\master\\code\\benchmarks\\similarities\\porto-dtw.csv")
+path_to_distances = os.path.abspath("")
 
 distances = _mirrorDiagonal(pd.read_csv(path_to_distances, index_col=0))
 print(distances)
-model = AgglomerativeClustering(n_clusters=48, affinity="euclidean", linkage="ward")
+model = AgglomerativeClustering(n_clusters=48, metric="euclidean", linkage="ward")
 
 
 a = model.fit_predict(distances)
