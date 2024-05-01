@@ -42,7 +42,7 @@ def fun_wrapper_p_grid(args):
     """
 
     num_of_files, resolution, layers = args
-    meta_file_p = f"../data/chosen_data/subset-100000/META-{num_of_files}.txt"
+    meta_file_p = f"../data/chosen_data/subset-100000/META.txt"
     grid = GridLSH("Porto G1", P_MIN_LAT, P_MAX_LAT, P_MIN_LON, P_MAX_LON, resolution, layers, meta_file_p, PORTO_DATA )
 
     return grid.measure_hash_computation(1,1)[0]

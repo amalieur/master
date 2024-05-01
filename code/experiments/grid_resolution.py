@@ -22,15 +22,16 @@ from utils.similarity_measures.distance import py_edit_distance_penalty as py_ed
 
 # Defining some constants
 
-PORTO_CHOSEN_DATA = "../data/chosen_data/porto/"
-PORTO_HASHED_DATA = "../data/hashed_data/grid/porto/"
-PORTO_META_TEST = "../data/hashed_data/grid/porto/META-50.txt"
+PORTO_CHOSEN_DATA = "../data/chosen_data/subset-100000/"
+PORTO_HASHED_DATA = "../data/hashed_data/grid/subset-100000/"
+#TODO: fix code so test is not needed
+PORTO_META_TEST = "../data/hashed_data/grid/subset-100000/META-test.txt"
 
 
-P_MAX_LON = -8.57
-P_MIN_LON = -8.66
-P_MAX_LAT = 41.19
-P_MIN_LAT = 41.14
+P_MAX_LON = -8.45
+P_MIN_LON = -8.72
+P_MAX_LAT = 41.26
+P_MIN_LAT = 41.07
 
 MEASURE = {
     "py_ed" : py_ed,

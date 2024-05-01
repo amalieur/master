@@ -20,15 +20,11 @@ P_MIN_LON = -8.66
 P_MAX_LAT = 41.19
 P_MIN_LAT = 41.14
 
-R_MAX_LON = 12.53
-R_MIN_LON = 12.44
-R_MAX_LAT = 41.93
-R_MIN_LAT = 41.88
+PORTO_CHOSEN_DATA = "../data/chosen_data/subset-100000/"
+PORTO_HASHED_DATA = "../data/hashed_data/grid/subset-100000/"
 
-PORTO_CHOSEN_DATA = "../data/chosen_data/porto/"
-PORTO_HASHED_DATA = "../data/hashed_data/grid/porto/"
-
-def PORTO_META(size: int): return f"../data/hashed_data/grid/porto/META-{size}.txt"
+#TODO: remove size
+def PORTO_META(size: int): return f"../data/hashed_data/grid/subset-100000/META.txt"
 
 MEASURE = {
     "ed" : py_ed,
