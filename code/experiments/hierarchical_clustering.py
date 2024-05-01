@@ -10,6 +10,8 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
+import global_variables
+
 from utils import metafile_handler as mfh
 from utils import file_handler as fh
 
@@ -52,9 +54,9 @@ class HCA():
             The city that should be clustered
         """
         n_clusters = len(set(self.clusters))
-
-        DATA_FOLDER = f"../data/chosen_data/{self.city.lower()}/"
-        META_FILE = f"../data/chosen_data/{self.city.lower()}/META-1000.txt"
+    
+        DATA_FOLDER = f"../data/chosen_data/{global_variables.CHOSEN_SUBSET_NAME}/"
+        META_FILE = f"../data/chosen_data/{global_variables.CHOSEN_SUBSET_NAME}/META.txt"
 
         files = mfh.read_meta_file(META_FILE)
         trajectories = fh.load_trajectory_files(files, DATA_FOLDER)
@@ -62,12 +64,13 @@ class HCA():
         keys = sorted(trajectories.keys())
 
         cmap = plt.get_cmap('brg')
+        #Here is the number of rows and columns set
         fig, axs = plt.subplots(6,5, sharex=True, sharey=True, figsize=(15, 15), dpi=300)
         fig.set
         plt.subplots_adjust(hspace=0, wspace=0)
         for i, ax in enumerate(axs.flat):
             j = 0
-            while j < 1000:
+            while j < global_variables.CHOSEN_SUBSET_SIZE:
                 if self.clusters[j] == i:
                     t_index = keys[j]
                     values = trajectories[t_index]
