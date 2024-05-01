@@ -1,6 +1,7 @@
 # These variables must be updated when a new subset is chosen.
 CHOSEN_SUBSET_NAME = "subset-100"
 CHOSEN_SUBSET_SIZE = 100
+CHOSEN_SUBSET_DATAFILE = "../data/raw_data/subset-100-6-percent.csv"
 
 
 #These variables must be updated when a new geographical area is chosen
