@@ -9,6 +9,8 @@ Each experiment will be run in 20 parallell jobs
 import numpy as np
 import pandas as pd
 
+import global_variables
+
 from matplotlib import pyplot as plt
 from multiprocessing import Pool
 
@@ -22,16 +24,10 @@ from utils.similarity_measures.distance import py_edit_distance_penalty as py_ed
 
 # Defining some constants
 
-PORTO_CHOSEN_DATA = "../data/chosen_data/subset-100000/"
-PORTO_HASHED_DATA = "../data/hashed_data/grid/subset-100000/"
+PORTO_CHOSEN_DATA = f"../data/chosen_data/{global_variables.CHOSEN_SUBSET_NAME}/"
+PORTO_HASHED_DATA = f"../data/hashed_data/grid/{global_variables.CHOSEN_SUBSET_NAME}/"
 #TODO: fix code so test is not needed
-PORTO_META_TEST = "../data/hashed_data/grid/subset-100000/META-test.txt"
-
-
-P_MAX_LON = -8.45
-P_MIN_LON = -8.72
-P_MAX_LAT = 41.26
-P_MIN_LAT = 41.07
+PORTO_META_TEST = f"../data/hashed_data/grid/{global_variables.CHOSEN_SUBSET_NAME}/META-test.txt"
 
 MEASURE = {
     "py_ed" : py_ed,
@@ -47,7 +43,7 @@ def _mirrorDiagonal(M: np.ndarray ) -> np.ndarray:
 def _constructGrid(city: str, res: float, layers: int) -> GridLSH:
     """ Constructs a grid hash object over the given city """
     if city.lower() == "porto":
-        return GridLSH(f"GP_{layers}-{'{:.2f}'.format(res)}", P_MIN_LAT, P_MAX_LAT, P_MIN_LON, P_MAX_LON, res, layers, PORTO_META_TEST, PORTO_CHOSEN_DATA)
+        return GridLSH(f"GP_{layers}-{'{:.2f}'.format(res)}", global_variables.P_MIN_LAT, global_variables.P_MAX_LAT, global_variables.P_MIN_LON, global_variables.P_MAX_LON, res, layers, PORTO_META_TEST, PORTO_CHOSEN_DATA)
     else:
         raise ValueError("City argument must be porto")
 

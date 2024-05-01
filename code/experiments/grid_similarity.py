@@ -9,22 +9,19 @@ import time
 import timeit as ti
 import pandas as pd
 
+import global_variables
+
 from schemes.grid_lsh import GridLSH
 
 from utils.similarity_measures.distance import py_edit_distance as py_ed
 from utils.similarity_measures.distance import py_edit_distance_penalty as py_edp
 from utils.similarity_measures.distance import py_edit_distance_penalty_parallell as py_edp_parallell
 
-P_MAX_LON = -8.57
-P_MIN_LON = -8.66
-P_MAX_LAT = 41.19
-P_MIN_LAT = 41.14
-
-PORTO_CHOSEN_DATA = "../data/chosen_data/subset-100000/"
-PORTO_HASHED_DATA = "../data/hashed_data/grid/subset-100000/"
+PORTO_CHOSEN_DATA = f"../data/chosen_data/{global_variables.CHOSEN_SUBSET_NAME}/"
+PORTO_HASHED_DATA = f"../data/hashed_data/grid/{global_variables.CHOSEN_SUBSET_NAME}/"
 
 #TODO: remove size
-def PORTO_META(size: int): return f"../data/hashed_data/grid/subset-100000/META.txt"
+def PORTO_META(size: int): return f"../data/hashed_data/grid/{global_variables.CHOSEN_SUBSET_NAME}/META.txt"
 
 MEASURE = {
     "ed" : py_ed,
@@ -34,7 +31,7 @@ MEASURE = {
 def _constructGrid(city: str, res: float, layers: int, size: int) -> GridLSH:
     """ Constructs a grid hash object over the given city """
     if city.lower() == "porto":
-        return GridLSH(f"GP_{layers}-{'{:.2f}'.format(res)}", P_MIN_LAT, P_MAX_LAT, P_MIN_LON, P_MAX_LON, res, layers, PORTO_META(size), PORTO_CHOSEN_DATA)
+        return GridLSH(f"GP_{layers}-{'{:.2f}'.format(res)}", global_variables.P_MIN_LAT, global_variables.P_MAX_LAT, global_variables.P_MIN_LON, global_variables.P_MAX_LON, res, layers, PORTO_META(size), PORTO_CHOSEN_DATA)
     else:
         raise ValueError("City argument must be porto")
     
