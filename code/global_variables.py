@@ -9,3 +9,9 @@ P_MAX_LON = -8.45
 P_MIN_LON = -8.72
 P_MAX_LAT = 41.26
 P_MIN_LAT = 41.07
+
+
+#FRECHET ALGORITHM
+#Threshold distance to approve that to points are similar enough(in meters) in Frechet distance
+FRECHET_THRESHOLD_DISTANCE = 120
+THRESHOLD_NUMBER_OF_TRAJECTORIES = 5
