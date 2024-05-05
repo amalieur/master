@@ -60,16 +60,22 @@ class HCA():
 
         files = mfh.read_meta_file(META_FILE)
         trajectories = fh.load_trajectory_files(files, DATA_FOLDER)
-        
         keys = sorted(trajectories.keys())
 
         cmap = plt.get_cmap('brg')
+
+        norm = plt.Normalize(0, n_clusters-1)  # Normaliser fargeområdet basert på antall klynger
+        # Her starter vi på samme farge for alle klynger og beveger oss langs colormapen
+        colors = cmap(norm(range(n_clusters)))
+
         #Here is the number of rows and columns set
         fig, axs = plt.subplots(6,5, sharex=True, sharey=True, figsize=(15, 15), dpi=300)
         fig.set
         plt.subplots_adjust(hspace=0, wspace=0)
+
         for i, ax in enumerate(axs.flat):
             j = 0
+            current_color_index = 0  # Indeks for nåværende farge i colormapen
             while j < global_variables.CHOSEN_SUBSET_SIZE:
                 if self.clusters[j] == i:
                     t_index = keys[j]
@@ -79,18 +85,19 @@ class HCA():
                     
                     traj_len = len(lats)
                     cm = plt.get_cmap("winter")
-                    ax.set_prop_cycle(color=[cm(1.*i/(traj_len-1)) for i in range(traj_len-1)])
+                    #ax.set_prop_cycle(color=[cm(1.*i/(traj_len-1)) for i in range(traj_len-1)])
                     #ax.text(0.01,0.99, i)
                     #ax.spines["top"].set_visible(False)
                     #ax.spines["right"].set_visible(False)
                     #ax.spines["bottom"].set_visible(False)
                     #ax.spines["left"].set_visible(False)
-                    for k in range(traj_len-1):
-                        ax.plot(lons[k:k+2], lats[k:k+2])
+                    #for k in range(traj_len-1):
+                        #ax.plot(lons[k:k+2], lats[k:k+2])
 
-
-                    #ax.plot(lons,lats, color=color)
+                    color = colors[current_color_index]  # Bruk nåværende farge
+                    ax.plot(lons,lats, color=color)
                 j+=1
+                current_color_index = (current_color_index + 1) % n_clusters  # Oppdater fargeindeksen for neste rute
         for ax in fig.get_axes():
             ax.label_outer()
             ax.tick_params(axis="both", which="major", labelsize=18)
@@ -114,3 +121,28 @@ class HCA():
     def calinski_harabaz(self) -> float:
         calinski_harabaz = metrics.calinski_harabasz_score(self.distances, self.clusters)
         return calinski_harabaz
+
+    #NEW METHOD
+
+    def get_cluster_dictionary(self) -> dict:
+
+        DATA_FOLDER = f"../data/chosen_data/{global_variables.CHOSEN_SUBSET_NAME}/"
+        META_FILE = f"../data/chosen_data/{global_variables.CHOSEN_SUBSET_NAME}/META.txt"
+
+        files = mfh.read_meta_file(META_FILE)
+        trajectories = fh.load_trajectory_files(files, DATA_FOLDER)
+        
+        keys = sorted(trajectories.keys())
+        print("TEST123")
+        print(keys)
+
+        resulting_dict = {}
+        for i in range(0, self.n_clusters):
+            resulting_dict[i] = []
+
+        for i in range(len(self.clusters)):
+            cluster_number = self.clusters[i]
+            resulting_dict[cluster_number].append(keys[i])
+
+        return resulting_dict
+
