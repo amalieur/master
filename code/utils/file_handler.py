@@ -25,6 +25,7 @@ def read_trajectory_file(file_path: str) -> list[list[float]]:
             file.close()
     except FileNotFoundError:
         print("Can't find file.")
+        print(file_path)
 
     return trajectory
 
@@ -51,7 +52,6 @@ def load_trajectory_files(files: list[str], folder_path) -> dict:
         trajectory = read_trajectory_file(folder_path + file_name)
         
         trajectories[key] = trajectory
-
     return trajectories
 
 
