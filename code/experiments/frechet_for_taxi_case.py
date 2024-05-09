@@ -3,39 +3,44 @@ from utils import file_handler as fh
 
 import global_variables
 
-from utils.trajectory_distance import get_euclidean_distance
+from geopy.distance import great_circle
 
 
 def do_whole_experiment(clusters_dict: dict):
-    
     taxi_trajectory_clusters = find_similarity_in_clusters(clusters_dict)
 
-    bus_trajectories_file = mfh.read_meta_file(f"../data/bus_data/META.txt")
-    bus_trajectories_dict = fh.load_trajectory_files(bus_trajectories_file, f"../data/bus_data/")
-    print(bus_trajectories_dict)
-    #reads the coordinates of the trajectories, because so far we only have their names
-    taxi_trajectory_files = mfh.read_meta_file(f"../data/chosen_data/{global_variables.CHOSEN_SUBSET_NAME}/META.txt")
-    taxi_trajectories_dict = fh.load_trajectory_files(taxi_trajectory_files, f"../data/chosen_data/{global_variables.CHOSEN_SUBSET_NAME}/")
+    if(len(taxi_trajectory_clusters)>0):
+        print("This is the found well-used taxi routes:")
+        for c in taxi_trajectory_clusters:
+            print(c)
+        bus_trajectories_file = mfh.read_meta_file(f"../data/bus_data/META.txt")
+        bus_trajectories_dict = fh.load_trajectory_files(bus_trajectories_file, f"../data/bus_data/")
+        #reads the coordinates of the trajectories, because so far we only have their names
+        taxi_trajectory_files = mfh.read_meta_file(f"../data/chosen_data/{global_variables.CHOSEN_SUBSET_NAME}/META.txt")
+        taxi_trajectories_dict = fh.load_trajectory_files(taxi_trajectory_files, f"../data/chosen_data/{global_variables.CHOSEN_SUBSET_NAME}/")
 
-    #saving all matches of trajectory-clusters (frequently used taxi-routes) and bus-routes
-    routes_with_match = []
-    #saving all trajectory-clusters (frequently used taxi-routes) that doesn't match any bus-route
-    routes_without_match = []
+        #saving all matches of trajectory-clusters (frequently used taxi-routes) and bus-routes
+        routes_with_match = []
+        #saving all trajectory-clusters (frequently used taxi-routes) that doesn't match any bus-route
+        routes_without_match = []
 
-    for cluster in taxi_trajectory_clusters:
-        has_a_match = False
-        for bus_name, bus_trajectory in bus_trajectories_dict.items():
-            for traj in cluster:
-                taxi_trajectory = taxi_trajectories_dict[traj]
-                matching_points = find_matching_points(taxi_trajectory, bus_trajectory)
-                if(check_for_similarity(matching_points, [len(taxi_trajectory), len(bus_trajectory)], 1)):
-                    routes_with_match.append([cluster, bus_name])
-                    has_a_match = True
-                    break
-        if(not has_a_match):
-           routes_without_match.append(cluster)
+        for cluster in taxi_trajectory_clusters:
+            has_a_match = False
+            for bus_name, bus_trajectory in bus_trajectories_dict.items():
+                for traj in cluster:
+                    taxi_trajectory = taxi_trajectories_dict[traj]
+                    matching_points = find_matching_points(taxi_trajectory, bus_trajectory)
+                    if(check_for_similarity(matching_points, [len(taxi_trajectory), len(bus_trajectory)], 1)):
+                        routes_with_match.append([cluster, bus_name])
+                        has_a_match = True
+                        break
+            if(not has_a_match):
+                routes_without_match.append(cluster)
 
-    return routes_with_match, routes_without_match, taxi_trajectories_dict, bus_trajectories_dict
+        return routes_with_match, routes_without_match, taxi_trajectories_dict, bus_trajectories_dict
+    else:
+        print("No well-used taxi routes is found.")
+        return [], [], {}, {}
             
 
             
@@ -61,16 +66,10 @@ def find_similarity_in_clusters(clusters_dict: dict):
                 trajectories_coordinates_list.append(trajectories[traj])
             groups = find_similarity_in_cluster(clusters_dict[cluster], trajectories_coordinates_list)
             for group in groups:
-                result_list.append(group)
+                if(len(group)>=global_variables.THRESHOLD_NUMBER_OF_TRAJECTORIES):
+                    result_list.append(group)
             
     return result_list
-
-def find_similarity_between_cluster_and_bussroute(cluster_list: list, buss_route: list):
-    for trajectory in cluster_list:
-        matching_points = find_matching_points(trajectory, buss_route)
-        if check_for_similarity(matching_points, [len(trajectory), len(buss_route)], 1):
-            return True
-    return False
         
 
    
@@ -115,7 +114,7 @@ def find_matching_points(t1: list, t2: list):
     matching_points = []
     for i1 in range(len(t1)):
         for i2 in range(len(t2)):
-            distance = get_euclidean_distance(t1[i1], t2[i2])
+            distance = great_circle((t1[i1][0], t1[i1][1]), (t2[i2][0], t2[i2][1])).m
             if distance <= global_variables.FRECHET_THRESHOLD_DISTANCE:
                 matching_points.append([i1, i2])
     return matching_points
@@ -139,6 +138,12 @@ def merge_list_of_clusters(pair_list: list):
         for l in cluster_list:
             if len(l)==0:
                 new_list.remove(l)
+        for cluster_index in range(len(new_list)):
+            temp_point_list = []
+            for traj in new_list[cluster_index]:
+                if traj not in temp_point_list:
+                    temp_point_list.append(traj)
+            new_list[cluster_index] = temp_point_list
         cluster_list = new_list.copy()
     return cluster_list
  
@@ -151,13 +156,14 @@ def check_for_similarity(point_list: list, lengths: list, traj_to_check: int):
     temp_number_of_points = 0
     #if traj_to_check=1, use index 0, if traj_to_check=2, use index 1
     for i in range(lengths[traj_to_check-1]):
-        number_of_connected_points = 0
+        has_connection = False
         for point in point_list:
             if point[traj_to_check-1]==i:
-                number_of_connected_points += 1
-                temp_number_of_points += 1
-        if number_of_connected_points>=1:
+                has_connection = True
+                break
+        if has_connection:
             temp_list.append(i)
+            temp_number_of_points += 1
         elif len(temp_list)>0:
             #to allow a gap of two routes
             if i-1 not in temp_list and i-2 not in temp_list:
