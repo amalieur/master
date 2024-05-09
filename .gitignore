@@ -1,5 +1,7 @@
 data/raw_data/taxi_february.txt
 data/raw_data/subset-100000-6-percent.csv
+data/raw_data/subset-10000-6-percent.csv
+data/raw_data/train.csv
 
 
 data/hashed_data/
