@@ -42,9 +42,15 @@ def do_whole_experiment(clusters_dict: dict, taxi_df: pd.DataFrame, bus_df: pd.D
         print(f"While it was found {len(routes_with_match)} matches between well-used taxi routes and bus routes.")
         print(f"The results are written to file in the folder: code/experiments/results/{global_variables.CHOSEN_SUBSET_NAME}/lists")
     else:
+        save_to_files([], [], taxi_df, bus_df)
         print("No well-used taxi routes is found.")
             
 def save_to_files(routes_with_match, routes_without_match, taxi_trajectories_df, bus_trajectories_df):
+    #To give user some respons even if there are no well used taxi routes
+    if(len(routes_with_match)==0 and len(routes_without_match)==0):
+        with open(f"../code/experiments/results/{global_variables.CHOSEN_SUBSET_NAME}/lists/no-clusters-found.txt", "w") as file:
+            file.write("No well used taxi routes were found.")
+
     for i in range(len(routes_with_match)):
         result_list = []
         

@@ -2,10 +2,24 @@
 
 import timeit
 import subprocess
+import os, shutil
 
 import global_variables
 
 def measure_time_used_to_run_notebook(path_to_notebook, output_path):
+    #Starting with deleting all existing files to make time usage fair
+    FOLDERS_TO_EMPTY = ["../data/bus_data", f"../data/chosen_data/{global_variables.CHOSEN_SUBSET_NAME}", f"../data/hashed_data/{global_variables.CHOSEN_SUBSET_NAME}", f"experiments/results/{global_variables.CHOSEN_SUBSET_NAME}/lists"]
+    for folder_path in FOLDERS_TO_EMPTY:
+        for filename in os.listdir(folder_path):
+            file_path = os.path.join(folder_path, filename)
+            try:
+                if os.path.isfile(file_path) or os.path.islink(file_path):
+                    os.unlink(file_path)
+                elif os.path.isdir(file_path):
+                    shutil.rmtree(file_path)
+            except Exception as e:
+                print("Failed to remove %s. Reason: %s" % (file_path, e))
+
     command = f"jupyter nbconvert --to notebook --execute {path_to_notebook}"
     execution_time = timeit.timeit(lambda: subprocess.run(command, shell=True), number=1)
     with open(output_path, 'w') as file:
@@ -17,6 +31,18 @@ def measure_time_used_to_run_notebook(path_to_notebook, output_path):
         file.write("\nFrechet percentage of match between trajectories: " + str(global_variables.THRESHOLD_PERCENTAGE_OF_TRAJECTORY))
         file.close()
 
+    #Ending with deleting the files used to prevent overload of files when susbet size is high
+    FOLDERS_TO_EMPTY = [f"../data/chosen_data/{global_variables.CHOSEN_SUBSET_NAME}", f"../data/hashed_data/{global_variables.CHOSEN_SUBSET_NAME}"]
+    for folder_path in FOLDERS_TO_EMPTY:
+        for filename in os.listdir(folder_path):
+            file_path = os.path.join(folder_path, filename)
+            try:
+                if os.path.isfile(file_path) or os.path.islink(file_path):
+                    os.unlink(file_path)
+                elif os.path.isdir(file_path):
+                    shutil.rmtree(file_path)
+            except Exception as e:
+                print("Failed to remove %s. Reason: %s" % (file_path, e))
 
 if __name__=="__main__":
     path_to_notebook = "taxi-similarity.ipynb"
