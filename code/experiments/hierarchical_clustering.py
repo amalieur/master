@@ -14,6 +14,7 @@ import global_variables
 
 from utils import metafile_handler as mfh
 from utils import file_handler as fh
+from math import ceil
 
 
 def _mirrorDiagonal(M: np.ndarray ) -> np.ndarray:
@@ -68,8 +69,9 @@ class HCA():
         # Her starter vi på samme farge for alle klynger og beveger oss langs colormapen
         colors = cmap(norm(range(n_clusters)))
 
+        number_of_rows = ceil(n_clusters/5)
         #Here is the number of rows and columns set
-        fig, axs = plt.subplots(6,5, sharex=True, sharey=True, figsize=(15, 15), dpi=300)
+        fig, axs = plt.subplots(number_of_rows,5, sharex=True, sharey=True, figsize=(15, 15), dpi=300)
         fig.set
         plt.subplots_adjust(hspace=0, wspace=0)
 
@@ -133,8 +135,6 @@ class HCA():
         trajectories = fh.load_trajectory_files(files, DATA_FOLDER)
         
         keys = sorted(trajectories.keys())
-        print("TEST123")
-        print(keys)
 
         resulting_dict = {}
         for i in range(0, self.n_clusters):

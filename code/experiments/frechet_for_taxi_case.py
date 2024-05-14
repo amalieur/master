@@ -1,20 +1,20 @@
 from utils import metafile_handler as mfh
 from utils import file_handler as fh
 
+import pandas as pd
+
 import global_variables
 
 from geopy.distance import great_circle
 
 
-def do_whole_experiment(clusters_dict: dict):
+def do_whole_experiment(clusters_dict: dict, taxi_df: pd.DataFrame, bus_df: pd.DataFrame):
     taxi_trajectory_clusters = find_similarity_in_clusters(clusters_dict)
 
     if(len(taxi_trajectory_clusters)>0):
-        print("This is the found well-used taxi routes:")
-        for c in taxi_trajectory_clusters:
-            print(c)
         bus_trajectories_file = mfh.read_meta_file(f"../data/bus_data/META.txt")
         bus_trajectories_dict = fh.load_trajectory_files(bus_trajectories_file, f"../data/bus_data/")
+
         #reads the coordinates of the trajectories, because so far we only have their names
         taxi_trajectory_files = mfh.read_meta_file(f"../data/chosen_data/{global_variables.CHOSEN_SUBSET_NAME}/META.txt")
         taxi_trajectories_dict = fh.load_trajectory_files(taxi_trajectory_files, f"../data/chosen_data/{global_variables.CHOSEN_SUBSET_NAME}/")
@@ -36,13 +36,34 @@ def do_whole_experiment(clusters_dict: dict):
                         break
             if(not has_a_match):
                 routes_without_match.append(cluster)
-
-        return routes_with_match, routes_without_match, taxi_trajectories_dict, bus_trajectories_dict
+        save_to_files(routes_with_match, routes_without_match, taxi_df, bus_df)
+        print(f"It was found {len(clusters_dict)} well used taxi routes.")
+        print(f"{len(routes_without_match)} of the well used routes did not match any bus routes.")
+        print(f"While it was found {len(routes_with_match)} matches between well-used taxi routes and bus routes.")
+        print(f"The results are written to file in the folder: code/experiments/results/{global_variables.CHOSEN_SUBSET_NAME}/lists")
     else:
         print("No well-used taxi routes is found.")
-        return [], [], {}, {}
             
+def save_to_files(routes_with_match, routes_without_match, taxi_trajectories_df, bus_trajectories_df):
+    for i in range(len(routes_with_match)):
+        result_list = []
+        
+        for index, row in taxi_trajectories_df.iterrows():
+            if str(row["TRIP_ID"]) in routes_with_match[i][0]:
+                result_list.append({'TRIP_ID': row["TRIP_ID"], 'CALL_TYPE': row["CALL_TYPE"], 'TIMESTAMP': row["TIMESTAMP"], 'POLYLINE': row["POLYLINE"]})
+        for index, row in bus_trajectories_df.iterrows():
+            if str(row["name"])==routes_with_match[i][1]:
+                result_list.append({'TRIP_ID': row["name"], 'CALL_TYPE': '0', 'TIMESTAMP': 0, 'POLYLINE': row["coordinates"]})
+        result_df = pd.DataFrame(result_list, columns=['TRIP_ID', 'CALL_TYPE', 'TIMESTAMP', 'POLYLINE'])
+        result_df.to_csv(f"../code/experiments/results/{global_variables.CHOSEN_SUBSET_NAME}/lists/match-{i}.csv", index=False)
 
+    for i in range(len(routes_without_match)):
+        result_list = []
+        for index, row in taxi_trajectories_df.iterrows():
+            if str(row["TRIP_ID"]) in routes_without_match[i]:
+                result_list.append({'TRIP_ID': row["TRIP_ID"], 'CALL_TYPE': row["CALL_TYPE"], 'TIMESTAMP': row["TIMESTAMP"], 'POLYLINE': row["POLYLINE"]})
+        result_df = pd.DataFrame(result_list, columns=['TRIP_ID', 'CALL_TYPE', 'TIMESTAMP', 'POLYLINE'])
+        result_df.to_csv(f"../code/experiments/results/{global_variables.CHOSEN_SUBSET_NAME}/lists/not-match-{i}.csv", index=False)
             
 
 

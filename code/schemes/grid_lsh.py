@@ -178,8 +178,3 @@ class GridLSH(LSHInterface):
                     print(f"\t{Fore.BLUE}{hash}{Style.RESET_ALL}")
 
 
-
-if __name__=="__main__":
-    Grid = GridLSH("G1",min_lat=41.14, max_lat=41.19, min_lon= -8.66, max_lon=-8.57, resolution=0.25, meta_file="meta.txt", data_path="/data")
-    print(Grid)
-
