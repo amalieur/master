@@ -7,6 +7,8 @@ Written to mimic the proposal from "Review and Perspective for distance based tr
 
 import numpy as np
 
+import global_variables
+
 def davies_bouldin(X: np.ndarray, clusters: np.ndarray):
     """Computes the adjusted davies bouldin index"""
     n_clusters = len(set(clusters))
@@ -20,7 +22,7 @@ def db_between_like(X: np.ndarray, clusters: np.ndarray):
     """Computing the between like part of the davis bouldin index
     Returns the sum of the clusters distance from the cluster centroid
     """
-    T_centroid = find_centroid(X, clusters=np.zeros(1000), cluster=0)
+    T_centroid = find_centroid(X, clusters=np.zeros(global_variables.CHOSEN_SUBSET_SIZE), cluster=0)
 
     n_clusters = len(set(clusters))
     inter_cluster_sum = 0

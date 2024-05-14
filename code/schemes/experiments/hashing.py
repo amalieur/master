@@ -9,17 +9,9 @@ from multiprocessing import Pool
 from schemes.disk_lsh import DiskLSH
 from schemes.grid_lsh import GridLSH
 
-P_MAX_LON = -8.57
-P_MIN_LON = -8.66
-P_MAX_LAT = 41.19
-P_MIN_LAT = 41.14
+import global_variables
 
-R_MAX_LON = 12.53
-R_MIN_LON = 12.44
-R_MAX_LAT = 41.93
-R_MIN_LAT = 41.88
-
-PORTO_DATA = "../data/chosen_data/subset-100000/"
+PORTO_DATA = f"../data/chosen_data/{global_variables.CHOSEN_SUBSET_NAME}/"
 
 # Defining some nescesary variables:
 
@@ -42,8 +34,8 @@ def fun_wrapper_p_grid(args):
     """
 
     num_of_files, resolution, layers = args
-    meta_file_p = f"../data/chosen_data/subset-100000/META.txt"
-    grid = GridLSH("Porto G1", P_MIN_LAT, P_MAX_LAT, P_MIN_LON, P_MAX_LON, resolution, layers, meta_file_p, PORTO_DATA )
+    meta_file_p = f"../data/chosen_data/{global_variables.CHOSEN_SUBSET_NAME}/META.txt"
+    grid = GridLSH("Porto G1", global_variables.P_MIN_LAT, global_variables.P_MAX_LAT, global_variables.P_MIN_LON, global_variables.P_MAX_LON, resolution, layers, meta_file_p, PORTO_DATA )
 
     return grid.measure_hash_computation(1,1)[0]
 
@@ -57,8 +49,8 @@ def fun_wrapper_p_naive(args):
     """
 
     num_of_files, num_disks, layers, diameter = args
-    meta_file_p = f"../data/chosen_data/subset-100000/META-{num_of_files}.txt"
-    disk = DiskLSH("Porto D1", P_MIN_LAT, P_MAX_LAT, P_MIN_LON, P_MAX_LON, num_disks, layers, diameter, meta_file_p, PORTO_DATA)
+    meta_file_p = f"../data/chosen_data/{global_variables.CHOSEN_SUBSET_NAME}/META.txt"
+    disk = DiskLSH("Porto D1", global_variables.P_MIN_LAT, global_variables.P_MAX_LAT, global_variables.P_MIN_LON, global_variables.P_MAX_LON, num_disks, layers, diameter, meta_file_p, PORTO_DATA)
     
     return disk.measure_hash_computation_numerical(1,1)[0]
 
@@ -71,8 +63,8 @@ def fun_wrapper_p_quadrants(args):
     """
 
     num_of_files, num_disks, layers, diameter = args
-    meta_file_p = f"../data/chosen_data/subset-100000/META-{num_of_files}.txt"
-    disk = DiskLSH("Porto D1", P_MIN_LAT, P_MAX_LAT, P_MIN_LON, P_MAX_LON, num_disks, layers, diameter, meta_file_p, PORTO_DATA)
+    meta_file_p = f"../data/chosen_data/{global_variables.CHOSEN_SUBSET_NAME}/META.txt"
+    disk = DiskLSH("Porto D1", global_variables.P_MIN_LAT, global_variables.P_MAX_LAT, global_variables.P_MIN_LON, global_variables.P_MAX_LON, num_disks, layers, diameter, meta_file_p, PORTO_DATA)
     
     return disk.measure_hash_computation_with_quad_tree_numerical(1,1)[0]
 
@@ -85,7 +77,7 @@ def fun_wrapper_p_KD_tree(args):
     """
 
     num_of_files, num_disks, layers, diameter = args
-    meta_file_p = f"../data/chosen_data/subset-100000/META-{num_of_files}.txt"
-    disk = DiskLSH("Porto D1", P_MIN_LAT, P_MAX_LAT, P_MIN_LON, P_MAX_LON, num_disks, layers, diameter, meta_file_p, PORTO_DATA)
+    meta_file_p = f"../data/chosen_data/{global_variables.CHOSEN_SUBSET_NAME}/META.txt"
+    disk = DiskLSH("Porto D1", global_variables.P_MIN_LAT, global_variables.P_MAX_LAT, global_variables.P_MIN_LON, global_variables.P_MAX_LON, num_disks, layers, diameter, meta_file_p, PORTO_DATA)
    
     return disk.measure_hash_computation_with_KD_tree_numerical(1,1)[0]
