@@ -1,6 +1,6 @@
 #!/bin/sh
 #SBATCH --account=ie-idi
-#SBATCH --job-name=trajectory-similarity-subset-7500
+#SBATCH --job-name=trajectory-similarity-subset-2500
 #SBATCH --time=0-06:00:00
 
 #SBATCH --partition=CPUQ
