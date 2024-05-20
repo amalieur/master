@@ -1,7 +1,7 @@
 # These variables must be updated when a new subset is chosen.
-CHOSEN_SUBSET_NAME = "subset-10000"
-CHOSEN_SUBSET_SIZE = 10000
-CHOSEN_SUBSET_DATAFILE = "../data/raw_data/sorted-subset-10000-6.csv"
+CHOSEN_SUBSET_NAME = "subset-2500"
+CHOSEN_SUBSET_SIZE = 2500
+CHOSEN_SUBSET_DATAFILE = "../data/raw_data/sorted-subset-2500-7.csv"
 CHOSEN_BUSROUTES_DATAFILE = "../data/raw_data/bus_routes-all-formatted.csv"
 
 
@@ -23,7 +23,7 @@ P_MIN_LAT = 41.07
 FRECHET_THRESHOLD_DISTANCE = 105
 
 #The number of similar trajectories needed to accept a well-used route
-THRESHOLD_NUMBER_OF_TRAJECTORIES = 100
+THRESHOLD_NUMBER_OF_TRAJECTORIES = 25
 
 #the percentage of connected points that need to match the other trajectory, to be a match
 THRESHOLD_PERCENTAGE_OF_TRAJECTORY = 0.7
