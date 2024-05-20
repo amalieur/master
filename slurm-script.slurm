@@ -1,7 +1,7 @@
 #!/bin/sh
 #SBATCH --account=ie-idi
-#SBATCH --job-name=trajectory-similarity-subset-7500
-#SBATCH --time=0-24:00:00
+#SBATCH --job-name=trajectory-similarity-subset-5000
+#SBATCH --time=0-12:00:00
 
 #SBATCH --partition=CPUQ
 #SBATCH --mem=128G
@@ -9,7 +9,7 @@
 #SBATCH --output=output.txt
 #SBATCH --error=output.err
 
-#SBATCH --mail-user=andrehva@stud.ntnu.no
+#SBATCH --mail-user=amalieur@stud.ntnu.no
 #SBATCH --mail-type=ALL
 
 WORKDIR=${SLURM_SUBMIT_DIR}
@@ -27,7 +27,7 @@ module load Anaconda3/2023.09-0
 #activate our environment
 conda activate masteroppgave
 
-git checkout branch-subset-7500
-git pull origin branch-subset-7500
+git checkout subset-5000
+git pull origin subset-5000
 
 python code/taxi-similarity.py
