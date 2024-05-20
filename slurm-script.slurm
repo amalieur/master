@@ -1,13 +1,13 @@
 #!/bin/sh
 #SBATCH --account=ie-idi
-#SBATCH --job-name=trajectory-similarity-subset-5000
+#SBATCH --job-name=trajectory-similarity-5000
 #SBATCH --time=0-12:00:00
 
 #SBATCH --partition=CPUQ
 #SBATCH --mem=128G
 #SBATCH --nodes=32
-#SBATCH --output=output.txt
-#SBATCH --error=output.err
+#SBATCH --output=output-5000.txt
+#SBATCH --error=output-5000.err
 
 #SBATCH --mail-user=amalieur@stud.ntnu.no
 #SBATCH --mail-type=ALL
