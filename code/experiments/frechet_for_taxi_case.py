@@ -57,21 +57,21 @@ def save_to_files(routes_with_match, routes_without_match, taxi_trajectories_df,
         result_list = []
         
         for index, row in taxi_trajectories_df.iterrows():
-            if str(row["TRIP_ID"]) in routes_with_match[i][0]:
-                result_list.append({'TRIP_ID': row["TRIP_ID"], 'CALL_TYPE': row["CALL_TYPE"], 'TIMESTAMP': row["TIMESTAMP"], 'POLYLINE': row["POLYLINE"]})
+            if str(row["INDEX"]) in routes_with_match[i][0]:
+                result_list.append({'INDEX': row["INDEX"], 'CALL_TYPE': row["CALL_TYPE"], 'TIMESTAMP': row["TIMESTAMP"], 'POLYLINE': row["POLYLINE"]})
         for index, row in bus_trajectories_df.iterrows():
             if str(row["name"])==routes_with_match[i][1]:
-                result_list.append({'TRIP_ID': row["name"], 'CALL_TYPE': '0', 'TIMESTAMP': 0, 'POLYLINE': row["coordinates"]})
-        result_df = pd.DataFrame(result_list, columns=['TRIP_ID', 'CALL_TYPE', 'TIMESTAMP', 'POLYLINE'])
+                result_list.append({'INDEX': row["name"], 'CALL_TYPE': '0', 'TIMESTAMP': 0, 'POLYLINE': row["coordinates"]})
+        result_df = pd.DataFrame(result_list, columns=['INDEX', 'CALL_TYPE', 'TIMESTAMP', 'POLYLINE'])
         result_df.to_csv(f"../code/experiments/results/{global_variables.CHOSEN_SUBSET_NAME}/lists/match-{i}.csv", index=False)
 
     for i in range(len(routes_without_match)):
         result_list = []
         for index, row in taxi_trajectories_df.iterrows():
-            if str(row["TRIP_ID"]) in routes_without_match[i]:
-                result_list.append({'TRIP_ID': row["TRIP_ID"], 'CALL_TYPE': row["CALL_TYPE"], 'TIMESTAMP': row["TIMESTAMP"], 'POLYLINE': row["POLYLINE"]})
-        result_df = pd.DataFrame(result_list, columns=['TRIP_ID', 'CALL_TYPE', 'TIMESTAMP', 'POLYLINE'])
-        result_df.to_csv(f"../code/experiments/results/{global_variables.CHOSEN_SUBSET_NAME}/lists/not-match-{i}.csv", index=False)
+            if str(row["INDEX"]) in routes_without_match[i]:
+                result_list.append({'INDEX': row["INDEX"], 'CALL_TYPE': row["CALL_TYPE"], 'TIMESTAMP': row["TIMESTAMP"], 'POLYLINE': row["POLYLINE"]})
+        result_df = pd.DataFrame(result_list, columns=['INDEX', 'CALL_TYPE', 'TIMESTAMP', 'POLYLINE'])
+        result_df.to_csv(f"../code/experiments/results/{global_variables.CHOSEN_SUBSET_NAME}/lists/no-match-{i}.csv", index=False)
             
 
 
