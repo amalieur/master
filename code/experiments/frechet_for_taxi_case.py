@@ -27,13 +27,15 @@ def do_whole_experiment(clusters_dict: dict, taxi_df: pd.DataFrame, bus_df: pd.D
         for cluster in taxi_trajectory_clusters:
             has_a_match = False
             for bus_name, bus_trajectory in bus_trajectories_dict.items():
+                number_of_matches = 0
                 for traj in cluster:
                     taxi_trajectory = taxi_trajectories_dict[traj]
                     matching_points = find_matching_points(taxi_trajectory, bus_trajectory)
                     if(check_for_similarity(matching_points, [len(taxi_trajectory), len(bus_trajectory)], 1)):
-                        routes_with_match.append([cluster, bus_name])
-                        has_a_match = True
-                        break
+                        number_of_matches+=1
+                if number_of_matches >= len(cluster)*0.5:
+                    routes_with_match.append([cluster, bus_name])
+                    has_a_match = True
             if(not has_a_match):
                 routes_without_match.append(cluster)
         save_to_files(routes_with_match, routes_without_match, taxi_df, bus_df)
