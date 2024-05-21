@@ -1,11 +1,12 @@
 #!/bin/sh
 #SBATCH --account=ie-idi
 #SBATCH --job-name=trajectory-similarity-subset-2500
-#SBATCH --time=0-06:00:00
+#SBATCH --time=0-12:00:00
 
 #SBATCH --partition=CPUQ
 #SBATCH --mem=128G
-#SBATCH --nodes=32
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=32
 #SBATCH --output=output.txt
 #SBATCH --error=output.err
 

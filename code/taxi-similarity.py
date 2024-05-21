@@ -48,5 +48,5 @@ if __name__=="__main__":
     path_to_notebook = "code/taxi-similarity.ipynb"
     output_path = "code/experiments/timing/"
     #change this name depending on what type of run is done
-    output_file_name = "datset-100000-with-LSH.txt"
+    output_file_name = "datset-2500-with-LSH.txt"
     measure_time_used_to_run_notebook(path_to_notebook, output_path+output_file_name)
