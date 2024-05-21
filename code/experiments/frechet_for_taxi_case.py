@@ -33,7 +33,7 @@ def do_whole_experiment(clusters_dict: dict, taxi_df: pd.DataFrame, bus_df: pd.D
                     matching_points = find_matching_points(taxi_trajectory, bus_trajectory)
                     if(check_for_similarity(matching_points, [len(taxi_trajectory), len(bus_trajectory)], 1)):
                         number_of_matches+=1
-                if number_of_matches >= len(cluster)*0.5:
+                if number_of_matches >= len(cluster)*0.4:
                     routes_with_match.append([cluster, bus_name])
                     has_a_match = True
             if(not has_a_match):
