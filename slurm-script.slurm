@@ -1,6 +1,6 @@
 #!/bin/sh
 #SBATCH --account=ie-idi
-#SBATCH --job-name=trajectory-similarity-subset-2500
+#SBATCH --job-name=trajectory-similarity-subset-7500
 #SBATCH --time=0-12:00:00
 
 #SBATCH --partition=CPUQ
@@ -28,7 +28,7 @@ module load Anaconda3/2023.09-0
 #activate our environment
 conda activate masteroppgave
 
-git checkout subset-2500
-git pull origin subset-2500
+git checkout subset-7500
+git pull origin subset-7500
 
 python code/taxi-similarity.py
