@@ -8,7 +8,7 @@ import global_variables
 
 def measure_time_used_to_run_notebook(path_to_notebook, output_path):
     #Starting with deleting all existing files to make time usage fair
-    FOLDERS_TO_EMPTY = [f"data/bus_data", f"data/chosen_data/{global_variables.CHOSEN_SUBSET_NAME}", f"data/hashed_data/{global_variables.CHOSEN_SUBSET_NAME}", f"code/experiments/results/{global_variables.CHOSEN_SUBSET_NAME}/lists"]
+    FOLDERS_TO_EMPTY = [f"data/bus_data", f"data/chosen_data/{global_variables.CHOSEN_SUBSET_NAME}", f"data/hashed_data/{global_variables.CHOSEN_SUBSET_NAME}", f"code/experiments/results/{global_variables.CHOSEN_SUBSET_NAME}/lists", f"code/experiments/results/{global_variables.CHOSEN_SUBSET_NAME}/plots"]
     for folder_path in FOLDERS_TO_EMPTY:
         for filename in os.listdir(folder_path):
             file_path = os.path.join(folder_path, filename)
