@@ -5,9 +5,10 @@
 
 #SBATCH --partition=CPUQ
 #SBATCH --mem=128G
-#SBATCH --nodes=32
-#SBATCH --output=output-5000.txt
-#SBATCH --error=output-5000.err
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=32
+#SBATCH --output=output-5000-1.txt
+#SBATCH --error=output-5000-1.err
 
 #SBATCH --mail-user=amalieur@stud.ntnu.no
 #SBATCH --mail-type=ALL
