@@ -1,0 +1,1 @@
+This folder will contain all of the hashes of the trajectories in subset-5000 as individual txt-files, after running porto-data.ipynb (when subset-5000 is chosen).
