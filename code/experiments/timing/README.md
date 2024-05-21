@@ -1,0 +1,1 @@
+In this folder the timing is saved. Txt-files containing information about the run is saved here as individual files.
