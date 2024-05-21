@@ -1,0 +1,1 @@
+During the calculations of the final results, the similarities calculated by edit distance of the hashes of the trajectories is saved here.
