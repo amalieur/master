@@ -1,1 +1,0 @@
-This folder will contain all bus routes as individual txt-files, after running bus-data.ipnyb.
