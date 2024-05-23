@@ -1,7 +1,7 @@
 # These variables must be updated when a new subset is chosen.
-CHOSEN_SUBSET_NAME = "subset-2500"
+CHOSEN_SUBSET_NAME = "subset-2500-2"
 CHOSEN_SUBSET_SIZE = 2500
-CHOSEN_SUBSET_DATAFILE = "../data/raw_data/sorted-subset-2500-7.csv"
+CHOSEN_SUBSET_DATAFILE = "../data/raw_data/new-subset-2500.csv"
 CHOSEN_BUSROUTES_DATAFILE = "../data/raw_data/bus_routes-all-formatted.csv"
 
 

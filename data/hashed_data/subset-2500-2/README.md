@@ -1,0 +1,1 @@
+This folder will contain all of the trajectories in new-subset-2500 as individual txt-files, after running porto-data.ipynb (when subset-2500 is chosen).
