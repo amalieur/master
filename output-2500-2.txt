@@ -1,0 +1,5 @@
+Running from this directory: /cluster/home/amalieur/master
+Name of job: trajectory-similarity-2500-2
+ID of job: 19739387
+The job was run on these nodes: idun-02-07
+Your branch is up to date with 'origin/new-subset-2500'.
