@@ -1,7 +1,7 @@
 #!/bin/sh
 #SBATCH --account=ie-idi
 #SBATCH --job-name=trajectory-similarity-without-lsh-subset-2500
-#SBATCH --time=0-06:00:00
+#SBATCH --time=0-24:00:00
 
 #SBATCH --partition=CPUQ
 #SBATCH --mem=128G
