@@ -46,7 +46,54 @@ def do_whole_experiment(clusters_dict: dict, taxi_df: pd.DataFrame, bus_df: pd.D
     else:
         save_to_files([], [], taxi_df, bus_df)
         print("No well-used taxi routes is found.")
-            
+
+def do_whole_experiment_with_only_lsh_to_find_well_used_routes(clusters_dict: dict, taxi_df: pd.DataFrame, bus_df: pd.DataFrame):
+    taxi_trajectory_clusters = []
+
+    #change the format of the clusters, as well as removing clusters which are to small
+    for cluster in clusters_dict.values():
+        if len(cluster)>=global_variables.THRESHOLD_NUMBER_OF_TRAJECTORIES:
+            taxi_trajectory_clusters.append(cluster)
+
+
+    if(len(taxi_trajectory_clusters)>0):
+        bus_trajectories_file = mfh.read_meta_file(f"../data/bus_data/META.txt")
+        bus_trajectories_dict = fh.load_trajectory_files(bus_trajectories_file, f"../data/bus_data/")
+
+        #reads the coordinates of the trajectories, because so far we only have their names
+        taxi_trajectory_files = mfh.read_meta_file(f"../data/chosen_data/{global_variables.CHOSEN_SUBSET_NAME}/META.txt")
+        taxi_trajectories_dict = fh.load_trajectory_files(taxi_trajectory_files, f"../data/chosen_data/{global_variables.CHOSEN_SUBSET_NAME}/")
+
+        #saving all matches of trajectory-clusters (frequently used taxi-routes) and bus-routes
+        routes_with_match = []
+        #saving all trajectory-clusters (frequently used taxi-routes) that doesn't match any bus-route
+        routes_without_match = []
+
+        for cluster in taxi_trajectory_clusters:
+            has_a_match = False
+            for bus_name, bus_trajectory in bus_trajectories_dict.items():
+                number_of_matches = 0
+                for traj in cluster:
+                    taxi_trajectory = taxi_trajectories_dict[traj]
+                    matching_points = find_matching_points(taxi_trajectory, bus_trajectory)
+                    if(check_for_similarity(matching_points, [len(taxi_trajectory), len(bus_trajectory)], 1)):
+                        number_of_matches+=1
+                if number_of_matches >= len(cluster)*0.4:
+                    routes_with_match.append([cluster, bus_name])
+                    has_a_match = True
+            if(not has_a_match):
+                routes_without_match.append(cluster)
+        save_to_files(routes_with_match, routes_without_match, taxi_df, bus_df)
+        print(f"It was found {len(clusters_dict)} well used taxi routes.")
+        print(f"{len(routes_without_match)} of the well used routes did not match any bus routes.")
+        print(f"While it was found {len(routes_with_match)} matches between well-used taxi routes and bus routes.")
+        print(f"The results are written to file in the folder: code/experiments/results/{global_variables.CHOSEN_SUBSET_NAME}/lists")
+    else:
+        save_to_files([], [], taxi_df, bus_df)
+        print("No well-used taxi routes is found.")
+
+
+
 def save_to_files(routes_with_match, routes_without_match, taxi_trajectories_df, bus_trajectories_df):
     #To give user some respons even if there are no well used taxi routes
     if(len(routes_with_match)==0 and len(routes_without_match)==0):
