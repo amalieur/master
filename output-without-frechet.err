@@ -1,0 +1,25 @@
+Already on 'without-frechet'
+Missing or invalid credentials.
+Error: connect ENOENT /tmp/vscode-git-d585d619c9.sock
+    at PipeConnectWrap.afterConnect [as oncomplete] (node:net:1278:16) {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'connect',
+  address: '/tmp/vscode-git-d585d619c9.sock'
+}
+Missing or invalid credentials.
+Error: connect ENOENT /tmp/vscode-git-d585d619c9.sock
+    at PipeConnectWrap.afterConnect [as oncomplete] (node:net:1278:16) {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'connect',
+  address: '/tmp/vscode-git-d585d619c9.sock'
+}
+remote: Repository not found.
+fatal: Authentication failed for 'https://github.com/amalieur/master.git/'
+[NbConvertApp] Converting notebook code/taxi-similarity-without-frechet.ipynb to notebook
+0.16s - Debugger warning: It seems that frozen modules are being used, which may
+0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off
+0.00s - to python to disable frozen modules.
+0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.
+[NbConvertApp] Writing 1281214 bytes to code/taxi-similarity-without-frechet.nbconvert.ipynb

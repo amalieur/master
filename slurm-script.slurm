@@ -1,14 +1,14 @@
 #!/bin/sh
 #SBATCH --account=ie-idi
-#SBATCH --job-name=trajectory-similarity-subset-2500
-#SBATCH --time=0-12:00:00
+#SBATCH --job-name=trajectory-similarity-subset-2500-without-Frechet
+#SBATCH --time=0-02:00:00
 
 #SBATCH --partition=CPUQ
 #SBATCH --mem=128G
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=32
-#SBATCH --output=output.txt
-#SBATCH --error=output.err
+#SBATCH --output=output-without-frechet.txt
+#SBATCH --error=output-without-frechet.err
 
 #SBATCH --mail-user=andrehva@stud.ntnu.no
 #SBATCH --mail-type=ALL
@@ -28,7 +28,7 @@ module load Anaconda3/2023.09-0
 #activate our environment
 conda activate masteroppgave
 
-git checkout subset-2500
-git pull origin subset-2500
+git checkout without-frechet
+git pull origin without-frechet
 
-python code/taxi-similarity.py
+python code/taxi-similarity-without-frechet.py

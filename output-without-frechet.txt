@@ -1,0 +1,6 @@
+Running from this directory: /cluster/home/andrehva/master
+Name of job: trajectory-similarity-subset-2500-without-Frechet
+ID of job: 19895249
+The job was run on these nodes: idun-02-01
+M	slurm-script.slurm
+Your branch is up to date with 'origin/without-frechet'.
