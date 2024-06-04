@@ -1,24 +1,20 @@
-# Code repository for master thesis project
+# Repository to perform experiments for TDT4900 - Computer Science, Master's Thesis
  
-This repo includes code and experiments. Experiments mainly conducted in jupyter notebooks and written in python scripts.
 
 ## Description
-/data folder contains the chosen trajectories that the experiments was conducted on, extracted from the raw_data subfolder. 
-
-/figures folder contains the output figures from the conducted experiments.
-
+/data folder contains the chosen data the experiments was conducted on.
 /code folder contains:
-- Jupyter notebooks where experiments was conducted
-- /benchmarks - code for computing the true similarities, as well as the computed similarities
-- /experiments - code for all experiments, as well as the hashed similarities and timing data.
-- /schemes - implementation of the LSH schemes (disk_lsh.py & grid_lsh.py), including the timing of hash computation.
+- The main Jupyter notebook running the whole experiment, [taxi-similarity.ipynb](./code/taxi-similarity.ipynb)
+- Jupyter notebooks running the different parts of the experiments 
+- /experiments/results: The resulting plots and csv files
+- /experiments/timing: The time consumption of the experiments
+- /schemes - implementation of the LSH schemes (disk_lsh.py & grid_lsh.py).
 - /utils - Mostly helper functions used throughout this project 
 
-/results - Symlink folder containing similarities and timing-results
 
 
 ## NOTES:
 
-"traj-dist" module have been used for similarity computation in this research. Package installed directly as a dependency in this project from: https://github.com/bguillouet/traj-dist
+Repository cloned from https://github.com/bjorafla/master and edited to suit our needs, as our work is a real-world application of the results of that experiment.
 
-"py_edp" as an option in similarity computation is in reality the dtw distance between the inputs. Not edit distance penalty as the name of the file suggests.
+"traj-dist" module have been used for similarity computation in this research. Package installed directly as a dependency in this project from: https://github.com/bguillouet/traj-dist
