@@ -18,3 +18,5 @@
 Repository cloned from https://github.com/bjorafla/master and edited to suit our needs, as our work is a real-world application of the results of that experiment.
 
 "traj-dist" module have been used for similarity computation in this research. Package installed directly as a dependency in this project from: https://github.com/bguillouet/traj-dist
+
+This work is a collaboration between Amalie Urdshals and Andrea Hetlevik Vanebo.
