@@ -1,0 +1,6 @@
+Time spent to run notebook: 1657.8195725679398 seconds.
+Name of dataset: ../data/raw_data/new-subset-2500.csv
+Size of dataset: 2500
+Frechet threshold distance: 105
+Frechet threshold number of trajectories in cluster: 25
+Frechet percentage of match between trajectories: 0.7
