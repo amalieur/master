@@ -1,5 +1,6 @@
-# Repository to perform experiments for TDT4900 - Computer Science, Master's Thesis
- 
+# Repository to perform experiments for TDT4900 - Computer Science, Master's Thesis  
+
+This work is a collaboration between Amalie Udrshals and Andrea Hetlevik Vanebo.  
 
 ## Description
 /data folder contains the chosen data the experiments were conducted on.  
