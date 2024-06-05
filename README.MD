@@ -2,7 +2,7 @@
  
 
 ## Description
-/data folder contains the chosen data the experiments was conducted on.
+/data folder contains the chosen data the experiments was conducted on.  
 /code folder contains:
 - The main Jupyter notebook running the whole experiment, [taxi-similarity.ipynb](./code/taxi-similarity.ipynb)
 - Jupyter notebooks running the different parts of the experiments 
